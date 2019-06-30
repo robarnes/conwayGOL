@@ -44,7 +44,15 @@ staticWorldLastCellCount = 0 #used to count how many cycles the qty. of cells is
 def generateSeeds():
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
-        cellCurrent[random.randint(0,numOfRows-1)][random.randint(0,numOfColumns-1)] = 1 #lets add some life seeds
+        #cellCurrent[random.randint(0,numOfRows-1)][random.randint(0,numOfColumns-1)] = 1 #lets add some life seeds
+	seedRow = random.randint(0,numOfRows-1)
+	seedCol = random.randint(0,numOfColumns-1)
+	cellCurrent[seedRow][seedCol] = 1
+	if 10 < seedRow < numOfRows-11:
+		if 10 < seedCol < numOfColumns-11: #only show if in display area
+		        strip.setPixelColor(rgbMap[seedRow-10][seedCol-10],Color(255,128,64))      #lets show where new seeds landed!
+    strip.show()
+    time.sleep(2) #dramatic pause
 
 def in_bounds(cellCurrent, row, col):
     if row < 0 or col < 0:
@@ -94,7 +102,7 @@ def isWorldStatic():
     staticWorldLastCellCount = staticWorldCurrentCellCount
     if staticWorldCurrentCellCount == 0: #everyone is dead, add seeds
         return True
-    elif staticWorldCount >= 100: #boooring.  add seeds
+    elif staticWorldCount >= 60: #boooring.  add seeds
         return True
     else:
         return False #everything is cool
@@ -115,8 +123,10 @@ def displayWorld():
     for i in range(0,numOfRows-20, 1):
         for j in range(0,numOfColumns-20, 1):
             if cellDisplay[i][j] == 1:
-		if cellLifespan[i][j] > 15:
+		if cellLifespan[i][j] > 60:
                 	strip.setPixelColor(rgbMap[i][j],Color(128,0,0)) #if alive set blue using the cell to rgb pixel map
+		elif cellLifespan[i][j] > 15:
+                	strip.setPixelColor(rgbMap[i][j],Color(0,0,128)) #if alive set blue using the cell to rgb pixel map
 		elif cellLifespan[i][j] > 5:
                 	strip.setPixelColor(rgbMap[i][j],Color(128,128,0)) #if alive set blue using the cell to rgb pixel map
 		else:
