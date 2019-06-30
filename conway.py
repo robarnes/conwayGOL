@@ -124,13 +124,13 @@ def displayWorld():
         for j in range(0,numOfColumns-20, 1):
             if cellDisplay[i][j] == 1:
 		if cellLifespan[i][j] > 60:
-                	strip.setPixelColor(rgbMap[i][j],Color(128,0,0)) #if alive set blue using the cell to rgb pixel map
-		elif cellLifespan[i][j] > 15:
                 	strip.setPixelColor(rgbMap[i][j],Color(0,0,128)) #if alive set blue using the cell to rgb pixel map
+		elif cellLifespan[i][j] > 15:
+                	strip.setPixelColor(rgbMap[i][j],Color(0,0,160)) #if alive set blue using the cell to rgb pixel map
 		elif cellLifespan[i][j] > 5:
                 	strip.setPixelColor(rgbMap[i][j],Color(128,128,0)) #if alive set blue using the cell to rgb pixel map
 		else:
-                	strip.setPixelColor(rgbMap[i][j],Color(0,128,128)) #if alive set blue using the cell to rgb pixel map
+                	strip.setPixelColor(rgbMap[i][j],Color(0,64,90)) #if alive set blue using the cell to rgb pixel map
             else:
                 strip.setPixelColor(rgbMap[i][j],Color(0,0,0))      #if dead turn off
     strip.show()
