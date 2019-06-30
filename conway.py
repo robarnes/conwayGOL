@@ -102,7 +102,7 @@ def isWorldStatic():
     staticWorldLastCellCount = staticWorldCurrentCellCount
     if staticWorldCurrentCellCount == 0: #everyone is dead, add seeds
         return True
-    elif staticWorldCount >= 60: #boooring.  add seeds
+    elif staticWorldCount >= 120: #boooring.  add seeds
         return True
     else:
         return False #everything is cool
