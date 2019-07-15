@@ -28,15 +28,15 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour ordering
 
-#minimum of 21
-numOfColumns = 36 #we chop 10 off each side when we display so it looks better
-numOfRows = 36    #otherwise you get a bunch of alive cells along the edge
+numOfColumns = 16 #what can we see on your display
+numOfRows = 16    #what can we see on your display
+unseenBorder = 10 #this border on all sides is processed, but not displays.  tries to make world fee 'infinite'
 
-cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix
-cellFuture = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix
-cellDisplay = [[0 for i in range(numOfColumns-20)] for j in range(numOfRows-20)]  #create an empty matrix
-cellLifespan = [[0 for i in range(numOfColumns-20)] for j in range(numOfRows-20)]  #create an empty matrix
-rgbMap = [[0 for i in range(numOfColumns-20)] for j in range(numOfRows-20)]  #create an empty matrix
+cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for current state
+cellFuture = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for future state
+cellDisplay = [[0 for i in range(numOfColumns-(2*unseenBorder))] for j in range(numOfRows-(2*unseenBorder))]  #create an empty matrix for the cells we will show
+cellLifespan = [[0 for i in range(numOfColumns-(2*unseenBorder))] for j in range(numOfRows-(2*unseenBorder))]  #create an empty matrix for tracking lifespan
+rgbMap = [[0 for i in range(numOfColumns-20)] for j in range(numOfRows-20)]  #create an empty matrix for mapping to how led's are numbered/ordered
 
 staticWorldCount = 0 #this is used to see if world has become static / non-changing
 staticWorldLastCellCount = 0 #used to count how many cycles the qty. of cells is static
@@ -76,9 +76,9 @@ def checkLife(cellCurrent, rowNumber, colNumber):
         cellFuture[rowNumber][colNumber] = 1
     if cellCurrent[rowNumber][colNumber] == 1:  #only check if already alive
         if neighbors(cellCurrent, rowNumber, colNumber) < 2: #do you have less than two neighbors?
-            cellFuture[rowNumber][colNumber] = 0
+            cellFuture[rowNumber][colNumber] = 0 #sorry, you die
         elif neighbors(cellCurrent, rowNumber, colNumber) > 3: #do you have more than 3 neighbors?
-            cellFuture[rowNumber][colNumber] = 0
+            cellFuture[rowNumber][colNumber] = 0 #sorry, you die
 
 def runSimulation():
     for i in range(numOfRows):
@@ -86,9 +86,9 @@ def runSimulation():
             checkLife(cellCurrent, j, i)
 
 def worldTrim():
-    for i in range(10,numOfRows-10, 1): #here we chop 10 rows/columns off each side of the world to make it look better
-        for j in range(9,numOfColumns-10, 1):
-            cellDisplay[i-10][j-10] = cellFuture[i][j]
+    for i in range(10,numOfRows-10, 1): #here we chop $unseenBorder rows/columns off each side of the world to make it look better
+        for j in range(9,numOfColumns-unseenBorder, 1):
+            cellDisplay[i-unseenBorder][j-unseenBorder] = cellFuture[i][j]
 
 def isWorldStatic():
     global staticWorldLastCellCount
@@ -108,8 +108,8 @@ def isWorldStatic():
         return False #everything is cool
 
 def checkLifespan():
-    for i in range(numOfRows-20):
-        for j in range(numOfColumns-20):
+    for i in range(numOfRows-(2*unseenBorder)):
+        for j in range(numOfColumns-(2*unseenBorder)):
             if cellDisplay[i][j] == 1: #lets see if we are alive
                 cellLifespan[i][j] = cellLifespan[i][j] + 1 #add to age
             else: #set age to zero
@@ -120,8 +120,8 @@ def displayWorld():
     #print(np.matrix(rgbMap)) #show the world
     #print(np.matrix(cellLifespan)) #show how long each cell is alive
     #print(np.sum(cellDisplay))  #show total number of cells alive
-    for i in range(0,numOfRows-20, 1):
-        for j in range(0,numOfColumns-20, 1):
+    for i in range(0,numOfRows-(2*unseenBorder), 1):
+        for j in range(0,numOfColumns-(2*unseenBorder), 1):
             if cellDisplay[i][j] == 1:
                 if cellLifespan[i][j] > 60:
                             strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set blue using the cell to rgb pixel map
@@ -137,13 +137,13 @@ def displayWorld():
 
 #map the RGB panel to the cellDisplay matrix
 rgbCell = 0
-for i in range(0,numOfRows-20, 2):
-    for j in range(0,numOfColumns-20, 1):
+for i in range(0,numOfRows-(2*unseenBorder), 2):
+    for j in range(0,numOfColumns-(2*unseenBorder), 1):
         rgbMap[i][j] = rgbCell
         rgbCell = rgbCell + 1
     i = i + 1
     if i <= numOfRows-20: #dont go too far now!
-        for k in range(numOfColumns-20-1,0-1,-1): #we need to decriment start by extra 1, as its going backwards
+        for k in range(numOfColumns-(2*unseenBorder)-1,0-1,-1): #we need to decriment start by extra 1, as its going backwards
             rgbMap[i][k] = rgbCell
             rgbCell = rgbCell + 1
 
