@@ -34,6 +34,11 @@ unseenBorder = 10 #this border on all sides is processed, but not displays.  tri
 numOfColumns = numOfColumns + (2*unseenBorder)
 numOfRows = numOfRows + (2*unseenBorder)
 
+current_milli_time = int(round(time.time() * 1000))  #these are used to update display at pre-ordained intervals
+last_milli_time = int(round(time.time() * 1000))
+updateRate = 1000 #how often do we update display (in milliseconds)
+
+
 cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for current state
 cellFuture = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for future state
 cellDisplay = [[0 for i in range(numOfColumns-(2*unseenBorder))] for j in range(numOfRows-(2*unseenBorder))]  #create an empty matrix for the cells we will show
@@ -165,8 +170,15 @@ if __name__ == '__main__':
             runSimulation()
             worldTrim()
             checkLifespan()
+
+            current_milli_time = int(round(time.time() * 1000))  
+            sleepTime = (current_milli_time - last_milli_time)*.001 #converting from millisconds to seconds for sleep function
+            print('Sleeping for : ' sleepTime)
+            time.sleep(sleepTime)
+            last_milli_time = current_milli_time
+
             displayWorld()
             cellCurrent = cellFuture
-            time.sleep(1)
+
 
 #print(np.shape(cellCurrent))
