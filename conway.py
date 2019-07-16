@@ -172,7 +172,8 @@ if __name__ == '__main__':
             checkLifespan()
 
             current_milli_time = int(round(time.time() * 1000))  
-            sleepTime = updateRate - ((current_milli_time - last_milli_time)*.001) #converting from millisconds to seconds for sleep function
+            sleepTime = updateRate - (current_milli_time - last_milli_time)
+            sleepTime = sleepTime * .001 #converting from millisconds to seconds for sleep function
             print('Sleeping for : ', sleepTime)
             time.sleep(sleepTime)
             last_milli_time = int(round(time.time() * 1000))
