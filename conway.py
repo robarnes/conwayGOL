@@ -55,8 +55,8 @@ def generateSeeds():
 	    seedRow = random.randint(0,numOfRows-1)
 	    seedCol = random.randint(0,numOfColumns-1)
 	    cellCurrent[seedRow][seedCol] = 1
-	    if unseenBorder < seedRow < (numOfRows-(unseenBorder-1)):
-	        if unseenBorder < seedCol < (numOfColumns-(unseenBorder-1)): #only show if in display area
+	    if unseenBorder < seedRow < (numOfRows-(unseenBorder+1)):
+	        if unseenBorder < seedCol < (numOfColumns-(unseenBorder+1)): #only show if in display area
 	            strip.setPixelColor(rgbMap[seedRow-unseenBorder][seedCol-unseenBorder],Color(255,128,64))      #lets show where new seeds landed!
     strip.show()
     time.sleep(2) #dramatic pause
