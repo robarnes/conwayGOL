@@ -176,7 +176,6 @@ if __name__ == '__main__':
             sleepTime = sleepTime * .001 #converting from millisconds to seconds for sleep function
             if (sleepTime < 0): #if we are behind schedule, don't sleep
                 sleepTime = 0
-            print('Sleeping for : ', sleepTime)
             time.sleep(sleepTime)
             last_milli_time = int(round(time.time() * 1000))
 
