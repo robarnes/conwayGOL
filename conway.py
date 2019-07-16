@@ -103,7 +103,7 @@ def isWorldStatic():
     staticWorldCurrentCellCount = np.sum(cellDisplay)
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
         staticWorldCount = staticWorldCount + 1
-        print(staticWorldCount) #just debugging
+        #print(staticWorldCount) #just debugging
     else:
         staticWorldCount = 0
     staticWorldLastCellCount = staticWorldCurrentCellCount
@@ -172,7 +172,7 @@ if __name__ == '__main__':
             checkLifespan()
 
             current_milli_time = int(round(time.time() * 1000))  
-            print(sleepTime = (current_milli_time - last_milli_time))
+            print(current_milli_time - last_milli_time)
             sleepTime = (current_milli_time - last_milli_time)*.001 #converting from millisconds to seconds for sleep function
             print('Sleeping for : ', sleepTime)
             time.sleep(sleepTime)
