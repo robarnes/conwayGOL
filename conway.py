@@ -31,6 +31,8 @@ LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour ordering
 numOfColumns = 16 #what can we see on your display
 numOfRows = 16    #what can we see on your display
 unseenBorder = 10 #this border on all sides is processed, but not displays.  tries to make world fee 'infinite'
+numOfColumns = numOfColumns + unseenBorder
+numOfRows = numOfRows + unseenBorder
 
 cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for current state
 cellFuture = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for future state
