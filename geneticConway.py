@@ -110,8 +110,27 @@ def newCell(cellCurrent, rowNumber, colNumber):
         return('PP')
     elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='P'): #check gene 2/2
         return('PP')
-    else:
+    if (cellCurrent[parentOne[0]][parentOne[1]][0]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='G'): #check gene 1/1
         return('GG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][0]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='G'): #check gene 1/2
+        return('GG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='G'): #check gene 2/1
+        return('GG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='G'): #check gene 2/2
+        return('GG')
+
+
+
+    if (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='G'): #check gene 1/1
+        return('PP')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='G'): #check gene 1/2
+        return('PP')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='P'): #check gene 2/1
+        return('PP')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='P'): #check gene 2/2
+        return('PP')    
+    else:
+        return('GG') #fallback gene?
 
 def checkLife(cellCurrent, rowNumber, colNumber):
     if (aliveCell(cellCurrent, rowNumber, colNumber) == 0): #no need to spawn life if already alive
