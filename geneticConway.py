@@ -102,11 +102,23 @@ def newCell(cellCurrent, rowNumber, colNumber):
     
     print("Genes of parents:", cellCurrent[parentOne[0]][parentOne[1]], cellCurrent[parentTwo[0]][parentTwo[1]])
 
+    if (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='P'): #check gene 1/1
+        return('PP')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='P'): #check gene 1/2
+        return('PP')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='P'): #check gene 2/1
+        return('PP')
+    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='P'): #check gene 2/2
+        return('PP')
+    else:
+        return('GG')
+
 def checkLife(cellCurrent, rowNumber, colNumber):
     if (aliveCell(cellCurrent, rowNumber, colNumber) == 0): #no need to spawn life if already alive
         if neighbors(cellCurrent, rowNumber, colNumber) == 3: #does this cell have three neighbors?
             newCell(cellCurrent, rowNumber, colNumber)
-            cellFuture[rowNumber][colNumber] = 'PP'
+            cellFuture[rowNumber][colNumber] = newCell(cellCurrent, rowNumber, colNumber)
+            print("birthed cell genes:", cellFuture[rowNumber][colNumber]) #new cell with genes from 'parents'
         elif neighbors(cellCurrent, rowNumber, colNumber) < 2: #do you have less than two neighbors?
             cellFuture[rowNumber][colNumber] = 0 #sorry, you die
         elif neighbors(cellCurrent, rowNumber, colNumber) > 3: #do you have more than 3 neighbors?
