@@ -1,7 +1,7 @@
 import numpy as np
 import time
 import random
-#DEBUG from neopixel import *
+from neopixel import *
 import argparse
 import signal
 import sys
@@ -26,7 +26,7 @@ LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
 LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
-#DEBUG LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour ordering
+LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour ordering
 
 numOfColumns = 16 #what can we see on your display
 numOfRows = 16    #what can we see on your display
@@ -51,15 +51,20 @@ staticWorldLastCellCount = 0 #used to count how many cycles the qty. of cells is
 def generateSeeds():
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
-        #cellCurrent[random.randint(0,numOfRows-1)][random.randint(0,numOfColumns-1)] = 1 #lets add some life seeds
-	    seedRow = random.randint(0,numOfRows-1)
-	    seedCol = random.randint(0,numOfColumns-1)
-	    cellCurrent[seedRow][seedCol] = 'PP'
-	    if unseenBorder < seedRow < numOfRows-(unseenBorder-1):
-	        if unseenBorder < seedCol < numOfColumns-(unseenBorder-1): #only show if in display area
+        seedRow = random.randint(0,numOfRows-1)
+        seedCol = random.randint(0,numOfColumns-1)
+        geneticOutcome = random.randint(0,2)
+        if geneticOutcome == 0:
+            cellCurrent[seedRow][seedCol] = 'PP' #Team Purple!
+        elif geneticOutcome == 1:
+            cellCurrent[seedRow][seedCol] = 'GG' #Team Green!
+        elif geneticOutcome == 2:
+            cellCurrent[seedRow][seedCol] = 'oo' #Team Orange!
+        if unseenBorder < seedRow < numOfRows-(unseenBorder-1):
+            if unseenBorder < seedCol < numOfColumns-(unseenBorder-1): #only show if in display area
 	            print(' ')
-                #DEBUG strip.setPixelColor(rgbMap[seedRow-unseenBorder][seedCol-unseenBorder],Color(255,128,64))      #lets show where new seeds landed!
-    #DEBUG strip.show()
+                strip.setPixelColor(rgbMap[seedRow-unseenBorder][seedCol-unseenBorder],Color(255,128,64))      #lets show where new seeds landed!
+    strip.show()
     time.sleep(0) #dramatic pause
 
 def in_bounds(cellCurrent, row, col):
@@ -100,33 +105,226 @@ def newCell(cellCurrent, rowNumber, colNumber):
     parentTwoIndex = random.randint(0,len(potentialParents)-1) #randomly choose one
     parentTwo = potentialParents[parentTwoIndex] #lock it in
     
-    print("Genes of parents:", cellCurrent[parentOne[0]][parentOne[1]], cellCurrent[parentTwo[0]][parentTwo[1]])
-
-    if (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='P'): #check gene 1/1
+    #print("Genes of parents:", cellCurrent[parentOne[0]][parentOne[1]], cellCurrent[parentTwo[0]][parentTwo[1]])
+ 
+    if (cellCurrent[parentOne[0]][parentOne[1]]=='PP' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PP'): #PP meet PP
         return('PP')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='P'): #check gene 1/2
-        return('PP')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='P'): #check gene 2/1
-        return('PP')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='P'): #check gene 2/2
-        return('PP')
-    if (cellCurrent[parentOne[0]][parentOne[1]][0]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='G'): #check gene 1/1
-        return('GG')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][0]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='G'): #check gene 1/2
-        return('GG')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='G'): #check gene 2/1
-        return('GG')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='G'): #check gene 2/2
-        return('GG')
-    if (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='G'): #check gene 1/1
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='GG'): #GG meet GG
         return('PG')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='G'): #check gene 1/2
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PP' and cellCurrent[parentTwo[0]][parentTwo[1]]=='GG'): #PP meet GG
         return('PG')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='P'): #check gene 2/1
-        return('GP')
-    elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='P'): #check gene 2/2
-        return('GP')    
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PP'): #GG meet PP
+        return('PG')   
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PG'): #PG meet PG
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('PP')
+        elif geneticOutcome == 1:
+            return('GG')
+        elif geneticOutcome == 2 or geneticOutcome == 3:
+            return('PG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PP' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PG'): #PP meet PG
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PP')
+        elif geneticOutcome == 1:
+            return('PG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PP' and cellCurrent[parentTwo[0]][parentTwo[1]]=='oo'): #PP meet oo
+        return('Po')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PP' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Po'): #PP meet Po
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PP')
+        elif geneticOutcome == 1:
+            return('Po')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PP' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Go'): #PP meet Go
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('Po')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PG'): #GG meet PG
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('GG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='oo'): #GG meet oo
+        return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Po'): #GG meet Po
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Po'): #GG meet Po
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Go'): #GG meet Go
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('GG')
+        elif geneticOutcome == 1:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='oo'): #PG meet oo
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('Po')
+        elif geneticOutcome == 1:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Po'):
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('PP')
+        elif geneticOutcome == 1:
+            return('PG')
+        elif geneticOutcome == 2:
+            return('Po')
+        elif geneticOutcome == 3:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Go'):
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('GG')
+        elif geneticOutcome == 1:
+            return('PG')
+        elif geneticOutcome == 2:
+            return('Po')
+        elif geneticOutcome == 3:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PP'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PP')
+        elif geneticOutcome == 1:
+            return('PG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='PG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='GG'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('GG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='oo' and cellCurrent[parentTwo[0]][parentTwo[1]]=='oo'):
+        return('oo')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='oo' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Po'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('Po')
+        elif geneticOutcome == 1:
+            return('oo')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='oo' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Go'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('Go')
+        elif geneticOutcome == 1:
+            return('oo')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='oo' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PP'):
+        return('Po')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='oo' and cellCurrent[parentTwo[0]][parentTwo[1]]=='GG'):
+        return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='oo' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PG'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('Po')
+        elif geneticOutcome == 1:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Po' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Po'):
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('PP')
+        elif geneticOutcome == 1:
+            return('oo')
+        elif geneticOutcome == 2 or geneticOutcome == 3:
+            return('Po')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Po' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Go'):
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('Go')
+        elif geneticOutcome == 2:
+            return('Po')
+        elif geneticOutcome == 3:
+            return('oo')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Po' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PP'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PP')
+        elif geneticOutcome == 1:
+            return('Po')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Po' and cellCurrent[parentTwo[0]][parentTwo[1]]=='GG'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Po' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PG'):
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('PP')
+        elif geneticOutcome == 1:
+            return('Po')
+        elif geneticOutcome == 2:
+            return('PG')
+        elif geneticOutcome == 3:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Po' and cellCurrent[parentTwo[0]][parentTwo[1]]=='oo'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('Po')
+        elif geneticOutcome == 1:
+            return('oo')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Go' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Go'):
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('GG')
+        elif geneticOutcome == 1:
+            return('oo')
+        elif geneticOutcome == 2 or geneticOutcome == 3:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Go' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PP'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('Po')
+        elif geneticOutcome == 1:
+            return('PG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Go' and cellCurrent[parentTwo[0]][parentTwo[1]]=='GG'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('Go')
+        elif geneticOutcome == 1:
+            return('GG')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Go' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PG'):
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('Po')
+        elif geneticOutcome == 2:
+            return('GG')
+        elif geneticOutcome == 3:
+            return('Go')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Go' and cellCurrent[parentTwo[0]][parentTwo[1]]=='oo'):
+        geneticOutcome = random.randint(0,1)
+        if geneticOutcome == 0:
+            return('Go')
+        elif geneticOutcome == 1:
+            return('oo')
+    elif (cellCurrent[parentOne[0]][parentOne[1]]=='Go' and cellCurrent[parentTwo[0]][parentTwo[1]]=='Po'):
+        geneticOutcome = random.randint(0,3)
+        if geneticOutcome == 0:
+            return('PG')
+        elif geneticOutcome == 1:
+            return('Po')
+        elif geneticOutcome == 2:
+            return('Go')
+        elif geneticOutcome == 3:
+            return('oo')
     else:
+        print('for some reason we are using fallback gene')
         return('GG') #fallback gene?
 
 def checkLife(cellCurrent, rowNumber, colNumber):
@@ -183,20 +381,20 @@ def displayWorld():
     #print(np.matrix(rgbMap)) #show the world
     #print(np.matrix(cellLifespan)) #show how long each cell is alive
     #print(np.sum(cellDisplay))  #show total number of cells alive
- #   for i in range(0,numOfRows-(2*unseenBorder), 1):
- #       for j in range(0,numOfColumns-(2*unseenBorder), 1):
- #           if cellDisplay[i][j] == 1:
- #               if cellLifespan[i][j] > 60:
- #                           strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set blue using the cell to rgb pixel map
- #               elif cellLifespan[i][j] > 15:
- #                           strip.setPixelColor(rgbMap[i][j],Color(128,0,0)) #if alive set blue using the cell to rgb pixel map
- #               elif cellLifespan[i][j] > 5:
- #                           strip.setPixelColor(rgbMap[i][j],Color(128,128,0)) #if alive set blue using the cell to rgb pixel map
- #               else:
- #                           strip.setPixelColor(rgbMap[i][j],Color(0,64,90)) #if alive set blue using the cell to rgb pixel map
- #           else:
- #               strip.setPixelColor(rgbMap[i][j],Color(0,0,0))      #if dead turn off
- #   strip.show()
+    for i in range(0,numOfRows-(2*unseenBorder), 1):
+        for j in range(0,numOfColumns-(2*unseenBorder), 1):
+            if cellDisplay[i][j] == 1:
+                if cellLifespan[i][j] > 60:
+                            strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set blue using the cell to rgb pixel map
+                elif cellLifespan[i][j] > 15:
+                            strip.setPixelColor(rgbMap[i][j],Color(128,0,0)) #if alive set blue using the cell to rgb pixel map
+                elif cellLifespan[i][j] > 5:
+                            strip.setPixelColor(rgbMap[i][j],Color(128,128,0)) #if alive set blue using the cell to rgb pixel map
+                else:
+                            strip.setPixelColor(rgbMap[i][j],Color(0,64,90)) #if alive set blue using the cell to rgb pixel map
+            else:
+                strip.setPixelColor(rgbMap[i][j],Color(0,0,0))      #if dead turn off
+    strip.show()
     print(' ')
 
 #map the RGB panel to the cellDisplay matrix
@@ -216,9 +414,9 @@ if __name__ == '__main__':
         opt_parse()
 
         # Create NeoPixel object with appropriate configuration.
-        #DEBUG strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+        strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
         # Intialize the library (must be called once before other functions).
-        #DEBUG strip.begin()
+        strip.begin()
 
         while True:
             #colorWipeFast(strip, Color(0, 0, 0))  # Clear the Strip
