@@ -118,17 +118,14 @@ def newCell(cellCurrent, rowNumber, colNumber):
         return('GG')
     elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='G'): #check gene 2/2
         return('GG')
-
-
-
     if (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='G'): #check gene 1/1
-        return('PP')
+        return('PG')
     elif (cellCurrent[parentOne[0]][parentOne[1]][0]=='P' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='G'): #check gene 1/2
-        return('PP')
+        return('PG')
     elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][0]=='P'): #check gene 2/1
-        return('PP')
+        return('GP')
     elif (cellCurrent[parentOne[0]][parentOne[1]][1]=='G' and cellCurrent[parentTwo[0]][parentTwo[1]][1]=='P'): #check gene 2/2
-        return('PP')    
+        return('GP')    
     else:
         return('GG') #fallback gene?
 
