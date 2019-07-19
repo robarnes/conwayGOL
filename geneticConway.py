@@ -87,6 +87,7 @@ def neighbors(cellCurrent, rowNumber, colNumber):
                 numNeighbors = numNeighbors + aliveCell(cellCurrent, rowNumber+rowShift, colNumber+colShift)
     if (aliveCell(cellCurrent, rowNumber, colNumber) == 1):  #lets not count ourselves, ok?
         numNeighbors = numNeighbors - 1
+    print('neighbors:', numNeighbors)
     return numNeighbors
 
 def newCell(cellCurrent, rowNumber, colNumber):
