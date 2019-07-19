@@ -84,8 +84,9 @@ def neighbors(cellCurrent, rowNumber, colNumber):
     for rowShift in range(-1,2,1):
         for colShift in range(-1,2,1):
             if in_bounds(cellCurrent, rowNumber+rowShift, colNumber+colShift):
-                numNeighbors = numNeighbors + aliveCell(cellCurrent, rowNumber+rowShift, colNumber+colShift)
-    if (aliveCell(cellCurrent, rowNumber, colNumber) == 1):  #lets not count ourselves, ok?
+                if cellCurrent[rowNumber+rowShift][colNumber+colShift] != 0:
+                    numNeighbors = numNeighbors +1
+    if cellCurrent[rowNumber][colNumber] != 0):  #lets not count ourselves, ok?
         numNeighbors = numNeighbors - 1
     print('neighbors:', numNeighbors)
     return numNeighbors
