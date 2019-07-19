@@ -30,7 +30,7 @@ LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour ordering
 
 numOfColumns = 16 #what can we see on your display
 numOfRows = 16    #what can we see on your display
-unseenBorder = 10 #this border on all sides is processed, but not displays.  tries to make world fee 'infinite'
+unseenBorder = 10 #this border on all sides is processed, but not displayed.  tries to make world feel 'infinite'
 numOfColumns = numOfColumns + (2*unseenBorder)
 numOfRows = numOfRows + (2*unseenBorder)
 
@@ -60,8 +60,8 @@ def generateSeeds():
             cellCurrent[seedRow][seedCol] = 'GG' #Team Green!
         elif geneticOutcome == 2:
             cellCurrent[seedRow][seedCol] = 'oo' #Team Orange!
-        if unseenBorder < seedRow < numOfRows-(unseenBorder-1):
-            if unseenBorder < seedCol < numOfColumns-(unseenBorder-1): #only show if in display area
+        if unseenBorder < seedRow < numOfRows-(unseenBorder+1):
+            if unseenBorder < seedCol < numOfColumns-(unseenBorder+1): #only show if in display area
                 strip.setPixelColor(rgbMap[seedRow-unseenBorder][seedCol-unseenBorder],Color(255,128,64))      #lets show where new seeds landed!
     strip.show()
     time.sleep(0) #dramatic pause
