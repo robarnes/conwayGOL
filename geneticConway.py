@@ -62,7 +62,6 @@ def generateSeeds():
             cellCurrent[seedRow][seedCol] = 'oo' #Team Orange!
         if unseenBorder < seedRow < numOfRows-(unseenBorder-1):
             if unseenBorder < seedCol < numOfColumns-(unseenBorder-1): #only show if in display area
-	            print(' ')
                 strip.setPixelColor(rgbMap[seedRow-unseenBorder][seedCol-unseenBorder],Color(255,128,64))      #lets show where new seeds landed!
     strip.show()
     time.sleep(0) #dramatic pause
@@ -383,15 +382,30 @@ def displayWorld():
     #print(np.sum(cellDisplay))  #show total number of cells alive
     for i in range(0,numOfRows-(2*unseenBorder), 1):
         for j in range(0,numOfColumns-(2*unseenBorder), 1):
-            if cellDisplay[i][j] == 1:
-                if cellLifespan[i][j] > 60:
-                            strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set blue using the cell to rgb pixel map
-                elif cellLifespan[i][j] > 15:
-                            strip.setPixelColor(rgbMap[i][j],Color(128,0,0)) #if alive set blue using the cell to rgb pixel map
-                elif cellLifespan[i][j] > 5:
-                            strip.setPixelColor(rgbMap[i][j],Color(128,128,0)) #if alive set blue using the cell to rgb pixel map
+            if cellDisplay[i][j] != 0: #is the cell alive
+#commenting out code to display cells based on lifespan                
+#                if cellLifespan[i][j] > 60:
+#                            strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set violet using the cell to rgb pixel map
+#                elif cellLifespan[i][j] > 15:
+#                            strip.setPixelColor(rgbMap[i][j],Color(128,0,0)) #if alive set red using the cell to rgb pixel map
+#                elif cellLifespan[i][j] > 5:
+#                            strip.setPixelColor(rgbMap[i][j],Color(128,128,0)) #if alive set yellow using the cell to rgb pixel map
+#                else:
+#                            strip.setPixelColor(rgbMap[i][j],Color(0,64,90)) #if alive set blue using the cell to rgb pixel map
+                if cellDisplay[i][j] == 'PP':
+                    strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
+                elif cellDisplay[i][j] == 'GG':
+                    strip.setPixelColor(rgbMap[i][j],Color(0,128,0)) #if alive set green using the cell to rgb pixel map 
+                elif cellDisplay[i][j] == 'PG':
+                    strip.setPixelColor(rgbMap[i][j],Color(0,0,128)) #if alive set blue using the cell to rgb pixel map 
+                elif cellDisplay[i][j] == 'oo':
+                    strip.setPixelColor(rgbMap[i][j],Color(128,80,0)) #if alive set orange using the cell to rgb pixel map 
+                elif cellDisplay[i][j] == 'Po':
+                    strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
+                elif cellDisplay[i][j] == 'Go':
+                    strip.setPixelColor(rgbMap[i][j],Color(0,128,0)) #if alive set green using the cell to rgb pixel map 
                 else:
-                            strip.setPixelColor(rgbMap[i][j],Color(0,64,90)) #if alive set blue using the cell to rgb pixel map
+                    print('we have an error houston')
             else:
                 strip.setPixelColor(rgbMap[i][j],Color(0,0,0))      #if dead turn off
     strip.show()
