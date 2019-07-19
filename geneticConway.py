@@ -85,10 +85,11 @@ def neighbors(cellCurrent, rowNumber, colNumber):
         for colShift in range(-1,2,1):
             if in_bounds(cellCurrent, rowNumber+rowShift, colNumber+colShift):
                 if cellCurrent[rowNumber+rowShift][colNumber+colShift] != 0:
-                    numNeighbors = numNeighbors +1
+                    numNeighbors = numNeighbors + 1
     if cellCurrent[rowNumber][colNumber] != 0:  #lets not count ourselves, ok?
         numNeighbors = numNeighbors - 1
-    print('neighbors:', numNeighbors)
+    if numNeighbors > 0:
+        print('neighbors:', numNeighbors)
     return numNeighbors
 
 def newCell(cellCurrent, rowNumber, colNumber):
@@ -329,15 +330,16 @@ def newCell(cellCurrent, rowNumber, colNumber):
         return('GG') #fallback gene?
 
 def checkLife(cellCurrent, rowNumber, colNumber):
-    if (aliveCell(cellCurrent, rowNumber, colNumber) == 0): #no need to spawn life if already alive
+    if cellCurrent[rowNumber][colNumber] == 0): #no need to spawn life if already alive
         if neighbors(cellCurrent, rowNumber, colNumber) == 3: #does this cell have three neighbors?
             newCell(cellCurrent, rowNumber, colNumber)
             cellFuture[rowNumber][colNumber] = newCell(cellCurrent, rowNumber, colNumber)
             print("birthed cell genes:", cellFuture[rowNumber][colNumber]) #new cell with genes from 'parents'
+    else: #if alive, see if stays alive    
         elif neighbors(cellCurrent, rowNumber, colNumber) < 2: #do you have less than two neighbors?
-            cellFuture[rowNumber][colNumber] = 0 #sorry, you die
+        cellFuture[rowNumber][colNumber] = 0 #sorry, you die
         elif neighbors(cellCurrent, rowNumber, colNumber) > 3: #do you have more than 3 neighbors?
-            cellFuture[rowNumber][colNumber] = 0 #sorry, you die
+        cellFuture[rowNumber][colNumber] = 0 #sorry, you die
 
 def runSimulation():
     for i in range(numOfRows):
