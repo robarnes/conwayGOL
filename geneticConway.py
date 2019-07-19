@@ -88,8 +88,6 @@ def neighbors(cellCurrent, rowNumber, colNumber):
                     numNeighbors = numNeighbors + 1
     if cellCurrent[rowNumber][colNumber] != 0:  #lets not count ourselves, ok?
         numNeighbors = numNeighbors - 1
-    if numNeighbors > 0:
-        print('neighbors:', numNeighbors)
     return numNeighbors
 
 def newCell(cellCurrent, rowNumber, colNumber):
@@ -380,7 +378,7 @@ def checkLifespan():
                 cellLifespan[i][j] = 0
 
 def displayWorld():
-    #print(np.matrix(cellDisplay)) #show the world
+    print(np.matrix(cellDisplay)) #show the world
     #print(np.matrix(rgbMap)) #show the world
     #print(np.matrix(cellLifespan)) #show how long each cell is alive
     #print(np.sum(cellDisplay))  #show total number of cells alive
