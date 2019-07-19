@@ -73,12 +73,6 @@ def in_bounds(cellCurrent, row, col):
         return False
     return True
 
-def aliveCell(cellCurrent, rowNumber, colNumber):
-    if (cellCurrent[rowNumber][colNumber] != 0):
-        return 1
-    else:
-        return 0
-
 def neighbors(cellCurrent, rowNumber, colNumber):
     numNeighbors = 0
     for rowShift in range(-1,2,1):
@@ -95,7 +89,7 @@ def newCell(cellCurrent, rowNumber, colNumber):
     for rowShift in range(-1,2,1):
         for colShift in range(-1,2,1):
             if in_bounds(cellCurrent, rowNumber+rowShift, colNumber+colShift):
-                if aliveCell(cellCurrent, rowNumber+rowShift, colNumber+colShift):
+                if cellCurrent[rowNumber+rowShift][colNumber+colShift] != 0:
                     #print("parent could be: ", rowNumber+rowShift,colNumber+colShift)
                     potentialParents.append([rowNumber+rowShift,colNumber+colShift])  #add this as a potential new parent
     #print(potentialParents)
