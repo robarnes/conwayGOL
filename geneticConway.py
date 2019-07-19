@@ -326,7 +326,7 @@ def checkLife(cellCurrent, rowNumber, colNumber):
         if neighbors(cellCurrent, rowNumber, colNumber) == 3: #does this cell have three neighbors?
             newCell(cellCurrent, rowNumber, colNumber)
             cellFuture[rowNumber][colNumber] = newCell(cellCurrent, rowNumber, colNumber)
-            print("birthed cell genes:", cellFuture[rowNumber][colNumber]) #new cell with genes from 'parents'
+            #print("birthed cell genes:", cellFuture[rowNumber][colNumber]) #new cell with genes from 'parents'
     else: #if alive, see if stays alive    
         if neighbors(cellCurrent, rowNumber, colNumber) < 2: #do you have less than two neighbors?
             cellFuture[rowNumber][colNumber] = 0 #sorry, you die
@@ -353,7 +353,7 @@ def isWorldStatic():
                 staticWorldCurrentCellCount = staticWorldCurrentCellCount + 1
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
         staticWorldCount = staticWorldCount + 1 #how long has it been the same?
-        #print(staticWorldCount) #just debugging
+        print(staticWorldCount) #just debugging
     else:
         staticWorldCount = 0
     staticWorldLastCellCount = staticWorldCurrentCellCount
