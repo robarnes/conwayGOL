@@ -353,12 +353,12 @@ def isWorldStatic():
                 staticWorldCurrentCellCount = staticWorldCurrentCellCount + 1
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
         staticWorldCount = staticWorldCount + 1 #how long has it been the same?
-        print("Static world count: ",staticWorldCount) #just debugging
+        #print("Static world count: ",staticWorldCount) #just debugging
     else:
         staticWorldCount = 0
     staticWorldLastCellCount = staticWorldCurrentCellCount
     if staticWorldCurrentCellCount == 0: #everyone is dead, add seeds
-        print("Resetting world")
+        #print("Resetting world")
         return True
     elif staticWorldCount >= 120: #boooring.  add seeds
         return True
@@ -442,7 +442,7 @@ if __name__ == '__main__':
             sleepTime = sleepTime * .001 #converting from millisconds to seconds for sleep function
             if (sleepTime < 0): #if we are behind schedule, don't sleep
                 sleepTime = 0
-            print("Sleep time: ", sleepTime)
+            #print("Sleep time: ", sleepTime)
             time.sleep(sleepTime)
             last_milli_time = int(round(time.time() * 1000))
 
