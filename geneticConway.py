@@ -104,7 +104,7 @@ def newCell(cellCurrent, rowNumber, colNumber):
     if (cellCurrent[parentOne[0]][parentOne[1]]=='PP' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PP'): #PP meet PP
         return('PP')
     elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='GG'): #GG meet GG
-        return('PG')
+        return('GG')
     elif (cellCurrent[parentOne[0]][parentOne[1]]=='PP' and cellCurrent[parentTwo[0]][parentTwo[1]]=='GG'): #PP meet GG
         return('PG')
     elif (cellCurrent[parentOne[0]][parentOne[1]]=='GG' and cellCurrent[parentTwo[0]][parentTwo[1]]=='PP'): #GG meet PP
@@ -347,8 +347,8 @@ def isWorldStatic():
     global staticWorldLastCellCount
     global staticWorldCount
     staticWorldCurrentCellCount = 0
-    for i in range(0,numOfRows-(2*unseenBorder), 1):
-        for j in range(0,numOfColumns-(2*unseenBorder), 1):
+    for i in range(unseenBorder-1,numOfRows-(2*unseenBorder), 1):
+        for j in range(unseenBorder-1,numOfColumns-(2*unseenBorder), 1):
             if cellCurrent[i][j] != 0:
                 staticWorldCurrentCellCount = staticWorldCurrentCellCount + 1
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
