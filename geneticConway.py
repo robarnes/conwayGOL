@@ -330,7 +330,7 @@ def newCell(cellCurrent, rowNumber, colNumber):
         return('GG') #fallback gene?
 
 def checkLife(cellCurrent, rowNumber, colNumber):
-    if cellCurrent[rowNumber][colNumber] == 0): #no need to spawn life if already alive
+    if cellCurrent[rowNumber][colNumber] == 0: #no need to spawn life if already alive
         if neighbors(cellCurrent, rowNumber, colNumber) == 3: #does this cell have three neighbors?
             newCell(cellCurrent, rowNumber, colNumber)
             cellFuture[rowNumber][colNumber] = newCell(cellCurrent, rowNumber, colNumber)
