@@ -336,7 +336,7 @@ def checkLife(cellCurrent, rowNumber, colNumber):
             cellFuture[rowNumber][colNumber] = newCell(cellCurrent, rowNumber, colNumber)
             print("birthed cell genes:", cellFuture[rowNumber][colNumber]) #new cell with genes from 'parents'
     else: #if alive, see if stays alive    
-        elif neighbors(cellCurrent, rowNumber, colNumber) < 2: #do you have less than two neighbors?
+        if neighbors(cellCurrent, rowNumber, colNumber) < 2: #do you have less than two neighbors?
         cellFuture[rowNumber][colNumber] = 0 #sorry, you die
         elif neighbors(cellCurrent, rowNumber, colNumber) > 3: #do you have more than 3 neighbors?
         cellFuture[rowNumber][colNumber] = 0 #sorry, you die
