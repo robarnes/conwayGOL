@@ -86,7 +86,7 @@ def neighbors(cellCurrent, rowNumber, colNumber):
             if in_bounds(cellCurrent, rowNumber+rowShift, colNumber+colShift):
                 if cellCurrent[rowNumber+rowShift][colNumber+colShift] != 0:
                     numNeighbors = numNeighbors +1
-    if cellCurrent[rowNumber][colNumber] != 0):  #lets not count ourselves, ok?
+    if cellCurrent[rowNumber][colNumber] != 0:  #lets not count ourselves, ok?
         numNeighbors = numNeighbors - 1
     print('neighbors:', numNeighbors)
     return numNeighbors
