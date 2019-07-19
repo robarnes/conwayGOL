@@ -355,7 +355,8 @@ def isWorldStatic():
     staticWorldCurrentCellCount = 0
     for i in range(0,numOfRows-(2*unseenBorder), 1):
         for j in range(0,numOfColumns-(2*unseenBorder), 1):
-            staticWorldCurrentCellCount = staticWorldCurrentCellCount + aliveCell(cellCurrent, i, j)
+            if cellCurrent[i][j] != 0:
+                staticWorldCurrentCellCount = staticWorldCurrentCellCount + 1
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
         staticWorldCount = staticWorldCount + 1 #how long has it been the same?
         #print(staticWorldCount) #just debugging
