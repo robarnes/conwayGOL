@@ -406,7 +406,6 @@ def displayWorld():
             else:
                 strip.setPixelColor(rgbMap[i][j],Color(0,0,0))      #if dead turn off
     strip.show()
-    print(' ')
 
 #map the RGB panel to the cellDisplay matrix
 rgbCell = 0
