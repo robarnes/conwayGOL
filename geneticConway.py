@@ -367,7 +367,7 @@ def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
     global orangeCount
     global purpleOrangeCount
     global greenOrangeCount
-    global staticWorldLastCellCount
+    global staticWorldCurrentCellCount
     if cellCurrent[rowNumber][colNumber] == 'PP':
         purpleCount += 1
     elif cellCurrent[rowNumber][colNumber] == 'GG':
