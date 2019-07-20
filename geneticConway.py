@@ -37,7 +37,7 @@ numOfRows = numOfRows + (2*unseenBorder)
 current_milli_time = int(round(time.time() * 1000))  #these are used to update display at pre-ordained intervals
 last_milli_time = int(round(time.time() * 1000))
 updateRate = 1000 #how often do we update display (in milliseconds)
-
+numberOfCycles = 0 #how long has this world been alive
 
 cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for current state
 cellFuture = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for future state
@@ -333,10 +333,28 @@ def checkLife(cellCurrent, rowNumber, colNumber):
         elif neighbors(cellCurrent, rowNumber, colNumber) > 3: #do you have more than 3 neighbors?
             cellFuture[rowNumber][colNumber] = 0 #sorry, you die
 
+def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
+    global numberOfCycles
+    if cellCurrent[rowNumber][colNumber] == 'PP':
+        purpleCount += 1
+    elif cellCurrent[rowNumber][colNumber] == 'GG':
+        greenCount += 1
+    elif cellCurrent[rowNumber][colNumber] == 'PG':
+        blueCount += 1
+    elif cellCurrent[rowNumber][colNumber] == 'oo':
+        orangeCount += 1
+    elif cellCurrent[rowNumber][colNumber] == 'Po':
+        PurpleOrangeCount += 1
+    elif cellCurrent[rowNumber][colNumber] == 'Go':
+        GreenOrangeCount += 1
+    if(numberOfCycles % 10 == 0): #every 10 times
+        print(purpleCount, greenCount, blueCount, orangeCount, PurpleOrangeCount, GreenOrangeCount)
+    
 def runSimulation():
     for i in range(numOfRows):
         for j in range(numOfColumns):
             checkLife(cellCurrent, j, i)
+            checkGeneticDiversity(cellCurrent, j, i)
 
 def worldTrim():
     for i in range(unseenBorder-1,numOfRows-unseenBorder, 1): #here we chop $unseenBorder rows/columns off each side of the world to make it look better
@@ -346,6 +364,9 @@ def worldTrim():
 def isWorldStatic():
     global staticWorldLastCellCount
     global staticWorldCount
+    global numberOfCycles
+
+    numberOfCycles = numberOfCycles + 1
     staticWorldCurrentCellCount = 0
     for i in range(unseenBorder-1,numOfRows-(2*unseenBorder), 1):
         for j in range(unseenBorder-1,numOfColumns-(2*unseenBorder), 1):
@@ -357,10 +378,9 @@ def isWorldStatic():
     else:
         staticWorldCount = 0
     staticWorldLastCellCount = staticWorldCurrentCellCount
-    if staticWorldCurrentCellCount == 0: #everyone is dead, add seeds
-        #print("Resetting world")
+    if staticWorldCurrentCellCount == 0 and staticWorldCount > 4: #everyone is dead, add seeds
         return True
-    elif staticWorldCount >= 120: #boooring.  add seeds
+    elif staticWorldCount >= 120 and staticWorldCount > 4: #boooring.  add seeds
         return True
     else:
         return False #everything is cool
