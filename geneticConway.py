@@ -371,7 +371,7 @@ def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
         greenOrangeCount += 1
     
 def runSimulation():
-    clearSeedCount():
+    clearSeedCount()
     for i in range(numOfRows):
         for j in range(numOfColumns):
             checkLife(cellCurrent, j, i)
