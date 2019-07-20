@@ -54,6 +54,7 @@ rgbMap = [[0 for i in range(numOfColumns-(2*unseenBorder))] for j in range(numOf
 
 staticWorldCount = 0 #this is used to see if world has become static / non-changing
 staticWorldLastCellCount = 0 #used to count how many cycles the qty. of cells is static
+staticWorldCurrentCellCount = 0
 
 def clearSeedCount():
     global numberOfCycles
@@ -63,12 +64,14 @@ def clearSeedCount():
     global orangeCount
     global purpleOrangeCount
     global greenOrangeCount
+    global staticWorldLastCellCount
     purpleCount = 0
     greenCount = 0
     blueCount = 0
     orangeCount = 0
     purpleOrangeCount = 0
     greenOrangeCount = 0
+    staticWorldCurrentCellCount = 0
 
 def generateSeeds():
     clearSeedCount()
@@ -364,6 +367,7 @@ def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
     global orangeCount
     global purpleOrangeCount
     global greenOrangeCount
+    global staticWorldLastCellCount
     if cellCurrent[rowNumber][colNumber] == 'PP':
         purpleCount += 1
     elif cellCurrent[rowNumber][colNumber] == 'GG':
@@ -376,6 +380,7 @@ def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
         purpleOrangeCount += 1
     elif cellCurrent[rowNumber][colNumber] == 'Go':
         greenOrangeCount += 1
+    staticWorldCurrentCellCount = purpleCount + greenCount + blueCount + orangeCount + purpleOrangeCount + greenOrangeCount
     
 def runSimulation():
     clearSeedCount()
@@ -393,21 +398,20 @@ def worldTrim():
 
 def isWorldStatic():
     global staticWorldLastCellCount
+    global staticWorldCurrentCellCount
     global staticWorldCount
     global numberOfCycles
 
     numberOfCycles += 1
-    staticWorldCurrentCellCount = 0
-    for i in range(unseenBorder-1,numOfRows-(2*unseenBorder), 1):
-        for j in range(unseenBorder-1,numOfColumns-(2*unseenBorder), 1):
-            if cellCurrent[i][j] != 0:
-                staticWorldCurrentCellCount = staticWorldCurrentCellCount + 1
+
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
         staticWorldCount = staticWorldCount + 1 #how long has it been the same?
-        #print('Static world count: %d' %(staticWorldCount))
+        print('Static world count: %d' %(staticWorldCount))
     else:
         staticWorldCount = 0
+
     staticWorldLastCellCount = staticWorldCurrentCellCount
+
     if staticWorldCurrentCellCount == 0 and staticWorldCount > 4: #everyone is dead, add seeds
         print("looks like they all died")
         staticWorldCount = 0
