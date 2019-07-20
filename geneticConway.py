@@ -68,7 +68,7 @@ def clearSeedCount():
     blueCount = 0
     orangeCount = 0
     purpleOrangeCount = 0
-    reenOrangeCount = 0
+    greenOrangeCount = 0
 
 def generateSeeds():
     clearSeedCount()
@@ -384,7 +384,7 @@ def runSimulation():
             checkLife(cellCurrent, j, i)
             checkGeneticDiversity(cellCurrent, j, i)
     if(numberOfCycles % 10 == 0): #every 10 times
-        print('PP: %d GG: %d PG: %d oo: %d Po %d Go %d' %(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount))
+        print('PP: %d GG: %d PG: %d oo: %d Po: %d Go: %d' %(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount))
 
 def worldTrim():
     for i in range(unseenBorder-1,numOfRows-unseenBorder, 1): #here we chop $unseenBorder rows/columns off each side of the world to make it look better
@@ -410,9 +410,11 @@ def isWorldStatic():
     staticWorldLastCellCount = staticWorldCurrentCellCount
     if staticWorldCurrentCellCount == 0 and staticWorldCount > 4: #everyone is dead, add seeds
         print("looks like they all died")
+        staticWorldCount = 0
         return True
     elif staticWorldCount >= 120 and staticWorldCount > 4: #boooring.  add seeds
         print("world is boring")
+        staticWorldCount = 0
         return True
     else:
         return False #everything is cool
