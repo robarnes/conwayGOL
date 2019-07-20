@@ -335,6 +335,12 @@ def checkLife(cellCurrent, rowNumber, colNumber):
 
 def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
     global numberOfCycles
+    purpleCount = 0
+    greenCount = 0
+    blueCount = 0
+    orangeCount = 0
+    purpleOrangeCount = 0
+    greenOrangeCount = 0
     if cellCurrent[rowNumber][colNumber] == 'PP':
         purpleCount += 1
     elif cellCurrent[rowNumber][colNumber] == 'GG':
@@ -344,11 +350,11 @@ def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
     elif cellCurrent[rowNumber][colNumber] == 'oo':
         orangeCount += 1
     elif cellCurrent[rowNumber][colNumber] == 'Po':
-        PurpleOrangeCount += 1
+        purpleOrangeCount += 1
     elif cellCurrent[rowNumber][colNumber] == 'Go':
-        GreenOrangeCount += 1
+        greenOrangeCount += 1
     if(numberOfCycles % 10 == 0): #every 10 times
-        print(purpleCount, greenCount, blueCount, orangeCount, PurpleOrangeCount, GreenOrangeCount)
+        print(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount)
     
 def runSimulation():
     for i in range(numOfRows):
