@@ -65,6 +65,7 @@ def clearSeedCount():
     global purpleOrangeCount
     global greenOrangeCount
     global staticWorldLastCellCount
+    global numberOfCycles
     purpleCount = 0
     greenCount = 0
     blueCount = 0
@@ -72,6 +73,7 @@ def clearSeedCount():
     purpleOrangeCount = 0
     greenOrangeCount = 0
     staticWorldCurrentCellCount = 0
+    numberOfCycles = 0
 
 def generateSeeds():
     clearSeedCount()
