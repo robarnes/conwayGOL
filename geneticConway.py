@@ -56,6 +56,13 @@ staticWorldCount = 0 #this is used to see if world has become static / non-chang
 staticWorldLastCellCount = 0 #used to count how many cycles the qty. of cells is static
 
 def clearSeedCount():
+    global numberOfCycles
+    global purpleCount
+    global greenCount
+    global blueCount
+    global orangeCount
+    global purpleOrangeCount
+    global greenOrangeCount
     purpleCount = 0
     greenCount = 0
     blueCount = 0
@@ -397,7 +404,7 @@ def isWorldStatic():
                 staticWorldCurrentCellCount = staticWorldCurrentCellCount + 1
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
         staticWorldCount = staticWorldCount + 1 #how long has it been the same?
-        #print("Static world count: ",staticWorldCount) #just debugging
+        print("Static world count: ",staticWorldCount) #just debugging
     else:
         staticWorldCount = 0
     staticWorldLastCellCount = staticWorldCurrentCellCount
@@ -476,9 +483,9 @@ if __name__ == '__main__':
 
         while True:
             #colorWipeFast(strip, Color(0, 0, 0))  # Clear the Strip
+            runSimulation()
             if isWorldStatic(): #if the world hasn't changed, lets add seeds
                 generateSeeds()
-            runSimulation()
             worldTrim()
             checkLifespan()
 
