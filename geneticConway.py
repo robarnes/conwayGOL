@@ -39,6 +39,13 @@ last_milli_time = int(round(time.time() * 1000))
 updateRate = 1000 #how often do we update display (in milliseconds)
 numberOfCycles = 0 #how long has this world been alive
 
+purpleCount = 0
+greenCount = 0
+blueCount = 0
+orangeCount = 0
+purpleOrangeCount = 0
+greenOrangeCount = 0
+
 cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for current state
 cellFuture = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #create an empty matrix for future state
 cellDisplay = [[0 for i in range(numOfColumns-(2*unseenBorder))] for j in range(numOfRows-(2*unseenBorder))]  #create an empty matrix for the cells we will show
@@ -49,6 +56,12 @@ staticWorldCount = 0 #this is used to see if world has become static / non-chang
 staticWorldLastCellCount = 0 #used to count how many cycles the qty. of cells is static
 
 def generateSeeds():
+    purpleCount = 0
+    greenCount = 0
+    blueCount = 0
+    orangeCount = 0
+    purpleOrangeCount = 0
+    reenOrangeCount = 0
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
         seedRow = random.randint(0,numOfRows-1)
@@ -335,12 +348,12 @@ def checkLife(cellCurrent, rowNumber, colNumber):
 
 def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
     global numberOfCycles
-    purpleCount = 0
-    greenCount = 0
-    blueCount = 0
-    orangeCount = 0
-    purpleOrangeCount = 0
-    greenOrangeCount = 0
+    global purpleCount
+    global greenCount
+    global blueCount
+    global orangeCount
+    global purpleOrangeCount
+    global greenOrangeCount
     if cellCurrent[rowNumber][colNumber] == 'PP':
         purpleCount += 1
     elif cellCurrent[rowNumber][colNumber] == 'GG':
@@ -353,14 +366,14 @@ def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
         purpleOrangeCount += 1
     elif cellCurrent[rowNumber][colNumber] == 'Go':
         greenOrangeCount += 1
-    if(numberOfCycles % 10 == 0): #every 10 times
-        print(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount)
     
 def runSimulation():
     for i in range(numOfRows):
         for j in range(numOfColumns):
             checkLife(cellCurrent, j, i)
             checkGeneticDiversity(cellCurrent, j, i)
+    if(numberOfCycles % 10 == 0): #every 10 times
+        print(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount)
 
 def worldTrim():
     for i in range(unseenBorder-1,numOfRows-unseenBorder, 1): #here we chop $unseenBorder rows/columns off each side of the world to make it look better
