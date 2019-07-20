@@ -407,6 +407,13 @@ def checkGeneticDiversity():
         return True
     
 def runSimulation():
+    global numberOfCycles
+    global purpleCount
+    global greenCount
+    global blueCount
+    global orangeCount
+    global purpleOrangeCount
+    global greenOrangeCount
     clearSeedCount()
     for i in range(numOfRows):
         for j in range(numOfColumns):
