@@ -359,7 +359,7 @@ def checkLife(cellCurrent, rowNumber, colNumber):
         elif neighbors(cellCurrent, rowNumber, colNumber) > 3: #do you have more than 3 neighbors?
             cellFuture[rowNumber][colNumber] = 0 #sorry, you die
 
-def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
+def geneticDiversityCount(cellCurrent, rowNumber, colNumber):
     global numberOfCycles
     global purpleCount
     global greenCount
@@ -381,13 +381,36 @@ def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
     elif cellCurrent[rowNumber][colNumber] == 'Go':
         greenOrangeCount += 1
     staticWorldCurrentCellCount = purpleCount + greenCount + blueCount + orangeCount + purpleOrangeCount + greenOrangeCount
+
+def checkGeneticDiversity():
+    global numberOfCycles
+    global purpleCount
+    global greenCount
+    global blueCount
+    global orangeCount
+    global purpleOrangeCount
+    global greenOrangeCount
+    if purpleCount > 0 and greenCount + blueCount + orangeCount + purpleOrangeCount + greenOrangeCount == 0:
+        return False
+    elif greenCount > 0 and purpleCount + blueCount + orangeCount + purpleOrangeCount + greenOrangeCount == 0:
+        return False
+    elif blueCount > 0 and purpleCount + greenCount + orangeCount + purpleOrangeCount + greenOrangeCount == 0:
+        return False
+    elif orangeCount > 0 and purpleCount + greenCount + blueCount + purpleOrangeCount + greenOrangeCount == 0:
+        return False
+    elif purpleOrangeCount > 0 and purpleCount + greenCount + blueCount + orangeCount + greenOrangeCount == 0:
+        return False
+    elif greenOrangeCount > 0 and purpleCount + greenCount + blueCount + orangeCount + purpleOrangeCount == 0:
+        return False
+    else:
+        return True
     
 def runSimulation():
     clearSeedCount()
     for i in range(numOfRows):
         for j in range(numOfColumns):
             checkLife(cellCurrent, j, i)
-            checkGeneticDiversity(cellCurrent, j, i)
+            geneticDiversityCount(cellCurrent, j, i)
     if(numberOfCycles % 10 == 0): #every 10 times
         print('PP: %d GG: %d PG: %d oo: %d Po: %d Go: %d Cycles: %d' %(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount, numberOfCycles))
 
@@ -401,7 +424,7 @@ def isWorldStatic():
     global staticWorldCurrentCellCount
     global staticWorldCount
     global numberOfCycles
-    print('Global cell count: %d' %(staticWorldCurrentCellCount))
+
     numberOfCycles += 1
 
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
@@ -418,6 +441,10 @@ def isWorldStatic():
         return True
     elif staticWorldCount >= 120 and staticWorldCount > 4: #boooring.  add seeds
         print("world is boring")
+        staticWorldCount = 0
+        return True
+    elif checkGeneticDiversity() == False:
+        print("world is not diverse")
         staticWorldCount = 0
         return True
     else:
