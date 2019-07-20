@@ -55,13 +55,16 @@ rgbMap = [[0 for i in range(numOfColumns-(2*unseenBorder))] for j in range(numOf
 staticWorldCount = 0 #this is used to see if world has become static / non-changing
 staticWorldLastCellCount = 0 #used to count how many cycles the qty. of cells is static
 
-def generateSeeds():
+def clearSeedCount():
     purpleCount = 0
     greenCount = 0
     blueCount = 0
     orangeCount = 0
     purpleOrangeCount = 0
     reenOrangeCount = 0
+
+def generateSeeds():
+    clearSeedCount():
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
         seedRow = random.randint(0,numOfRows-1)
@@ -368,6 +371,7 @@ def checkGeneticDiversity(cellCurrent, rowNumber, colNumber):
         greenOrangeCount += 1
     
 def runSimulation():
+    clearSeedCount():
     for i in range(numOfRows):
         for j in range(numOfColumns):
             checkLife(cellCurrent, j, i)
@@ -385,7 +389,7 @@ def isWorldStatic():
     global staticWorldCount
     global numberOfCycles
 
-    numberOfCycles = numberOfCycles + 1
+    numberOfCycles += 1
     staticWorldCurrentCellCount = 0
     for i in range(unseenBorder-1,numOfRows-(2*unseenBorder), 1):
         for j in range(unseenBorder-1,numOfColumns-(2*unseenBorder), 1):
@@ -398,8 +402,10 @@ def isWorldStatic():
         staticWorldCount = 0
     staticWorldLastCellCount = staticWorldCurrentCellCount
     if staticWorldCurrentCellCount == 0 and staticWorldCount > 4: #everyone is dead, add seeds
+        print("looks like they all died")
         return True
     elif staticWorldCount >= 120 and staticWorldCount > 4: #boooring.  add seeds
+        print("world is boring")
         return True
     else:
         return False #everything is cool
