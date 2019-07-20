@@ -401,7 +401,7 @@ def isWorldStatic():
     global staticWorldCurrentCellCount
     global staticWorldCount
     global numberOfCycles
-
+    print('Global cell count: %d' %(staticWorldCurrentCellCount))
     numberOfCycles += 1
 
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
