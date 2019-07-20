@@ -435,18 +435,21 @@ def isWorldStatic():
 
     staticWorldLastCellCount = staticWorldCurrentCellCount
 
-    if staticWorldCurrentCellCount == 0 and staticWorldCount > 4: #everyone is dead, add seeds
-        print("looks like they all died")
-        staticWorldCount = 0
-        return True
-    elif staticWorldCount >= 120 and staticWorldCount > 4: #boooring.  add seeds
-        print("world is boring")
-        staticWorldCount = 0
-        return True
-    elif checkGeneticDiversity() == False:
-        print("world is not diverse")
-        staticWorldCount = 0
-        return True
+    if(numberOfCycles % 10 == 0): #only allow resets when stats are shown (every 10 turns)
+        if staticWorldCurrentCellCount == 0 and staticWorldCount > 4: #everyone is dead, add seeds
+            print("Reset: looks like they all died")
+            staticWorldCount = 0
+            return True
+        elif staticWorldCount >= 120 and staticWorldCount > 4: #boooring.  add seeds
+            print("Reset: world is boring")
+            staticWorldCount = 0
+            return True
+        elif checkGeneticDiversity() == False:
+            print("Reset: world is not diverse")
+            staticWorldCount = 0
+            return True
+        else:
+            return False #everything is cool
     else:
         return False #everything is cool
 
