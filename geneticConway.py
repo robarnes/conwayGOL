@@ -384,7 +384,7 @@ def runSimulation():
             checkLife(cellCurrent, j, i)
             checkGeneticDiversity(cellCurrent, j, i)
     if(numberOfCycles % 10 == 0): #every 10 times
-        print(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount)
+        print('PP: %d GG: %d PG: %d oo: %d Po %d Go %d' %(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount))
 
 def worldTrim():
     for i in range(unseenBorder-1,numOfRows-unseenBorder, 1): #here we chop $unseenBorder rows/columns off each side of the world to make it look better
@@ -404,7 +404,7 @@ def isWorldStatic():
                 staticWorldCurrentCellCount = staticWorldCurrentCellCount + 1
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
         staticWorldCount = staticWorldCount + 1 #how long has it been the same?
-        print("Static world count: ",staticWorldCount) #just debugging
+        print('Static world count: %d' %(staticWorldCount)
     else:
         staticWorldCount = 0
     staticWorldLastCellCount = staticWorldCurrentCellCount
