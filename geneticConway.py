@@ -57,7 +57,6 @@ staticWorldLastCellCount = 0 #used to count how many cycles the qty. of cells is
 staticWorldCurrentCellCount = 0
 
 def clearSeedCount():
-    global numberOfCycles
     global purpleCount
     global greenCount
     global blueCount
@@ -65,7 +64,6 @@ def clearSeedCount():
     global purpleOrangeCount
     global greenOrangeCount
     global staticWorldLastCellCount
-    global numberOfCycles
     purpleCount = 0
     greenCount = 0
     blueCount = 0
@@ -73,10 +71,11 @@ def clearSeedCount():
     purpleOrangeCount = 0
     greenOrangeCount = 0
     staticWorldCurrentCellCount = 0
-    numberOfCycles = 0
 
 def generateSeeds():
     clearSeedCount()
+    global numberOfCycles
+    numberOfCycles = 0
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
         seedRow = random.randint(0,numOfRows-1)
