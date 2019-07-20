@@ -404,7 +404,7 @@ def isWorldStatic():
                 staticWorldCurrentCellCount = staticWorldCurrentCellCount + 1
     if staticWorldLastCellCount == staticWorldCurrentCellCount: #we have same number of cells as last time?
         staticWorldCount = staticWorldCount + 1 #how long has it been the same?
-        print('Static world count: %d' %(staticWorldCount)
+        print('Static world count: %d' %(staticWorldCount))
     else:
         staticWorldCount = 0
     staticWorldLastCellCount = staticWorldCurrentCellCount
