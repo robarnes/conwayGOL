@@ -64,7 +64,7 @@ def clearSeedCount():
     reenOrangeCount = 0
 
 def generateSeeds():
-    clearSeedCount():
+    clearSeedCount()
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
         seedRow = random.randint(0,numOfRows-1)
