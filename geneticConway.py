@@ -527,7 +527,7 @@ if __name__ == '__main__':
             runSimulation()
             if isWorldStatic(): #if the world hasn't changed, lets add seeds
                 generateSeeds()
-                cellCurrent = cellFuture
+                cellFuture = cellCurrent
                 print(np.matrix(cellCurrent)) #show the world
             worldTrim()
             checkLifespan()
