@@ -78,11 +78,11 @@ def generateSeeds():
     global cellCurrent
     numberOfCycles = 0
 
-    time.sleep(1) #lets pause and reflect before we reset the world
+    time.sleep(5) #lets pause and reflect before we reset the world
     cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #empty the matrix
     displayWorld()
 
-    numberOfSeeds = int((numOfColumns*numOfRows)*.3) #lets seed the world with about 30%
+    numberOfSeeds = int((numOfColumns*numOfRows)*.2) #lets seed the world with about 20%
     for x in range(numberOfSeeds):
         seedRow = random.randint(0,numOfRows-1)
         seedCol = random.randint(0,numOfColumns-1)
@@ -97,7 +97,7 @@ def generateSeeds():
             if unseenBorder < seedCol < numOfColumns-(unseenBorder+1): #only show if in display area
                 strip.setPixelColor(rgbMap[seedRow-unseenBorder][seedCol-unseenBorder],Color(255,128,64))      #lets show where new seeds landed!
     strip.show()
-    time.sleep(1) #dramatic pause
+    time.sleep(5) #dramatic pause
 
 def in_bounds(cellCurrent, row, col):
     if row < 0 or col < 0:
@@ -528,7 +528,6 @@ if __name__ == '__main__':
             if isWorldStatic(): #if the world hasn't changed, lets add seeds
                 generateSeeds()
                 cellFuture = cellCurrent
-                print(np.matrix(cellCurrent)) #show the world
             worldTrim()
             checkLifespan()
 
