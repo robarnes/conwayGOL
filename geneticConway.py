@@ -78,7 +78,8 @@ def generateSeeds():
     numberOfCycles = 0
 
     time.sleep(5) #little pause showing the end of the current world
-    strip.fill(Color(0,0,0),0,numOfColumns*numOfRows) #clear out all the led's
+    strip.fill((0,0,0)) #clear out all the led's
+    strip.show()
 
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
