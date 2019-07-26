@@ -76,6 +76,10 @@ def generateSeeds():
     clearSeedCount()
     global numberOfCycles
     numberOfCycles = 0
+
+    time.sleep(5) #little pause showing the end of the current world
+    strip.clear() #clear out all the led's
+
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
         seedRow = random.randint(0,numOfRows-1)
@@ -91,7 +95,7 @@ def generateSeeds():
             if unseenBorder < seedCol < numOfColumns-(unseenBorder+1): #only show if in display area
                 strip.setPixelColor(rgbMap[seedRow-unseenBorder][seedCol-unseenBorder],Color(255,128,64))      #lets show where new seeds landed!
     strip.show()
-    time.sleep(0) #dramatic pause
+    time.sleep(5) #dramatic pause
 
 def in_bounds(cellCurrent, row, col):
     if row < 0 or col < 0:
@@ -408,19 +412,11 @@ def checkGeneticDiversity():
     
 def runSimulation():
     global numberOfCycles
-    global purpleCount
-    global greenCount
-    global blueCount
-    global orangeCount
-    global purpleOrangeCount
-    global greenOrangeCount
     clearSeedCount()
     for i in range(numOfRows):
         for j in range(numOfColumns):
             checkLife(cellCurrent, j, i)
             geneticDiversityCount(cellCurrent, j, i)
-    if(numberOfCycles % 10 == 0): #every 10 times
-        print('PP: %d GG: %d PG: %d oo: %d Po: %d Go: %d Cycles: %d' %(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount, numberOfCycles))
 
 def worldTrim():
     for i in range(unseenBorder-1,numOfRows-unseenBorder, 1): #here we chop $unseenBorder rows/columns off each side of the world to make it look better
