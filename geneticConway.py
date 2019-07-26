@@ -1,7 +1,7 @@
 import numpy as np
 import time
 import random
-from neopixel import *
+import neopixel
 import argparse
 import signal
 import sys
