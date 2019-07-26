@@ -77,8 +77,7 @@ def generateSeeds():
     global numberOfCycles
     numberOfCycles = 0
 
-    time.sleep(5) #little pause showing the end of the current world
-    colorWipeFast(strip, Color(0, 0, 0))  # Clear the Strip
+    cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #empty the matrix
 
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
@@ -522,9 +521,10 @@ if __name__ == '__main__':
         strip.begin()
 
         while True:
-            #colorWipeFast(strip, Color(0, 0, 0))  # Clear the Strip
             runSimulation()
             if isWorldStatic(): #if the world hasn't changed, lets add seeds
+                time.sleep(5) #lets pause and reflect before we reset the world
+                colorWipeFast(strip, Color(0, 0, 0))  # Clear the Strip
                 generateSeeds()
             worldTrim()
             checkLifespan()
