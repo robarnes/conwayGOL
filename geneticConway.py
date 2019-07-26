@@ -446,7 +446,7 @@ def isWorldStatic():
             print("Reset: looks like they all died")
             staticWorldCount = 0
             return True
-        elif staticWorldCount >= 120 and staticWorldCount > 4: #boooring.  add seeds
+        elif staticWorldCount >= 120: #boooring.  add seeds
             print("Reset: world is boring")
             staticWorldCount = 0
             return True
