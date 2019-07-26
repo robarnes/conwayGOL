@@ -97,6 +97,7 @@ def generateSeeds():
                 strip.setPixelColor(rgbMap[seedRow-unseenBorder][seedCol-unseenBorder],Color(255,128,64))      #lets show where new seeds landed!
     strip.show()
     time.sleep(5) #dramatic pause
+    print(np.matrix(cellDisplay)) #show the world
 
 def in_bounds(cellCurrent, row, col):
     if row < 0 or col < 0:
