@@ -1,7 +1,7 @@
 import numpy as np
 import time
 import random
-import neopixel
+from neopixel import *
 import argparse
 import signal
 import sys
@@ -78,8 +78,7 @@ def generateSeeds():
     numberOfCycles = 0
 
     time.sleep(5) #little pause showing the end of the current world
-    strip.fill((0,0,0)) #clear out all the led's
-    strip.show()
+    colorWipe(strip, Color(0,0,0)) #clear out all the led's
 
     numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
     for x in range(numberOfSeeds):
