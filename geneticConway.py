@@ -72,7 +72,7 @@ def clearSeedCount():
     greenOrangeCount = 0
     staticWorldCurrentCellCount = 0
 
-def generateSeeds(cellCurrent):
+def generateSeeds():
     clearSeedCount()
     global numberOfCycles
     global cellCurrent
