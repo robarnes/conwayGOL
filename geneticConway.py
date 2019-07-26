@@ -81,7 +81,7 @@ def generateSeeds():
     cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #empty the matrix
     displayWorld()
 
-    numberOfSeeds = int((numOfColumns*numOfRows)*.1) #lets seed the world with about 10%
+    numberOfSeeds = int((numOfColumns*numOfRows)*.3) #lets seed the world with about 30%
     for x in range(numberOfSeeds):
         seedRow = random.randint(0,numOfRows-1)
         seedCol = random.randint(0,numOfColumns-1)
