@@ -75,6 +75,7 @@ def clearSeedCount():
 def generateSeeds(cellCurrent):
     clearSeedCount()
     global numberOfCycles
+    global cellCurrent
     numberOfCycles = 0
 
     time.sleep(5) #lets pause and reflect before we reset the world
@@ -526,7 +527,7 @@ if __name__ == '__main__':
         while True:
             runSimulation()
             if isWorldStatic(): #if the world hasn't changed, lets add seeds
-                generateSeeds(cellCurrent)
+                generateSeeds()
             worldTrim()
             checkLifespan()
 
