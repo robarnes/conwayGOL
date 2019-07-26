@@ -442,7 +442,6 @@ def isWorldStatic():
     staticWorldLastCellCount = staticWorldCurrentCellCount
 
     if(numberOfCycles % 10 == 0): #only allow resets when stats are shown (every 10 turns)
-        if(numberOfCycles % 10 == 0): #every 10 times
         print('PP: %d GG: %d PG: %d oo: %d Po: %d Go: %d Cycles: %d' %(purpleCount, greenCount, blueCount, orangeCount, purpleOrangeCount, greenOrangeCount, numberOfCycles))
         if staticWorldCurrentCellCount == 0 and staticWorldCount > 4: #everyone is dead, add seeds
             print("Reset: looks like they all died")
