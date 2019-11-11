@@ -7,8 +7,8 @@ from graphics import *
 import time
 import random
 
-numOfColumns = 50 #what can we see on your display
-numOfRows = 50    #what can we see on your display
+numOfColumns = 48 #what can we see on your display
+numOfRows = 48    #what can we see on your display
 
 class Cell:
     'Common base class for all cells'
@@ -375,6 +375,7 @@ def runSimulation(world, numOfRows,numOfColumns):
     return world
 
 def draw(world, numOfRows, numOfColumns, win):
+    #this function used for testing, drawing on screen instead of NEOPIXEL display
     for item in win.items[:]:
         item.undraw()
     win.update()
@@ -407,10 +408,10 @@ def draw(world, numOfRows, numOfColumns, win):
 win = GraphWin('planet', numOfRows*8, numOfColumns*8) # give title and dimensions
 world = createWorld()
 world = generateSeeds(world)
-for x in range(100):
-    world = runSimulation(world, numOfRows, numOfColumns)
-    world = nextRound(world, numOfRows, numOfColumns)
-    draw(world, numOfRows, numOfColumns, win)
-    if checkDiversity(world, numOfRows, numOfColumns) == False:
+while True:
+    world = runSimulation(world, numOfRows, numOfColumns) # see who lives, dies, who is born (but don't kill cells until we check all of them)
+    world = nextRound(world, numOfRows, numOfColumns) # advance the cell status for next round (ie flag as born/dead)
+    draw(world, numOfRows, numOfColumns, win) # display the outcome
+    if checkDiversity(world, numOfRows, numOfColumns) == False: # if noone is alive, or only one color is alive, then restart
         print("i can't live like this")
         world = generateSeeds(world)
