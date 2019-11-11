@@ -360,6 +360,13 @@ def checkLife(world, rowNumber, colNumber):
             world[rowNumber][colNumber].kill() #sorry, you die
     return world
 
+def countCells(world, numOfRows, numOfColumns):
+    cellCount = 0
+    for rowNumber in range(numOfRows):
+        for colNumber in range(numOfColumns):
+            cellCount = cellCount + world[rowNumber][colNumber].alive #add one to the counter if alive
+    print("CellCount: ",cellCount)
+
 def nextRound(world, numOfRows, numOfColumns):
     for rowNumber in range(numOfRows):
         for colNumber in range(numOfColumns):
@@ -412,6 +419,7 @@ while True:
     world = runSimulation(world, numOfRows, numOfColumns) # see who lives, dies, who is born (but don't kill cells until we check all of them)
     world = nextRound(world, numOfRows, numOfColumns) # advance the cell status for next round (ie flag as born/dead)
     draw(world, numOfRows, numOfColumns, win) # display the outcome
+    countCells(world, numOfRows, numOfColumns)
     if checkDiversity(world, numOfRows, numOfColumns) == False: # if noone is alive, or only one color is alive, then restart
         print("i can't live like this")
         world = generateSeeds(world)
