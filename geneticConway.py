@@ -78,7 +78,7 @@ def generateSeeds():
     global cellCurrent
     numberOfCycles = 0
 
-    time.sleep(5) #lets pause and reflect before we reset the world
+    time.sleep(6) #lets pause and reflect before we reset the world
     cellCurrent = [[0 for i in range(numOfColumns)] for j in range(numOfRows)]  #empty the matrix
     displayWorld()
 
