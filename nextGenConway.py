@@ -2,13 +2,14 @@
 # class turorial : https://www.tutorialspoint.com/python/python_classes_objects.htm
 # graphics tutorial : http://anh.cs.luc.edu/python/hands-on/3.1/handsonHtml/graphics.html
 
-
 from graphics import *
 import time
 import random
 
 numOfColumns = 48 #what can we see on your display
 numOfRows = 48    #what can we see on your display
+cellCount = 0     #used to track cell counts between rounds.  Used to catch 'stable' configurations
+stableCycleCount = 0 #used to track how many rounds the cell count has been stable/stagnant
 
 class Cell:
     'Common base class for all cells'
@@ -360,12 +361,16 @@ def checkLife(world, rowNumber, colNumber):
             world[rowNumber][colNumber].kill() #sorry, you die
     return world
 
-def countCells(world, numOfRows, numOfColumns):
+def checkStable(world, numOfRows, numOfColumns, lastCellCount, stableCycleCount):
     cellCount = 0
     for rowNumber in range(numOfRows):
         for colNumber in range(numOfColumns):
             cellCount = cellCount + world[rowNumber][colNumber].alive #add one to the counter if alive
-    print("CellCount: ",cellCount)
+    if lastCellCount == cellCount:
+        stableCycleCount = stableCycleCount + 1
+    else:
+        stableCycleCount = 0
+    return cellCount, stableCycleCount
 
 def nextRound(world, numOfRows, numOfColumns):
     for rowNumber in range(numOfRows):
@@ -412,14 +417,18 @@ def draw(world, numOfRows, numOfColumns, win):
             #dot.draw(win)
     time.sleep(.5)
             
-win = GraphWin('planet', numOfRows*8, numOfColumns*8) # give title and dimensions
+win = GraphWin('planet', numOfRows*8, numOfColumns*8) # give title and dimensions of the graphical window/display
 world = createWorld()
 world = generateSeeds(world)
+
 while True:
     world = runSimulation(world, numOfRows, numOfColumns) # see who lives, dies, who is born (but don't kill cells until we check all of them)
     world = nextRound(world, numOfRows, numOfColumns) # advance the cell status for next round (ie flag as born/dead)
     draw(world, numOfRows, numOfColumns, win) # display the outcome
-    countCells(world, numOfRows, numOfColumns)
+    cellCount, stableCycleCount = checkStable(world, numOfRows, numOfColumns, cellCount, stableCycleCount)
+    if stableCycleCount > 20 :
+        print("resetting as world is stagnant")
+        world = generateSeeds(world)
     if checkDiversity(world, numOfRows, numOfColumns) == False: # if noone is alive, or only one color is alive, then restart
-        print("i can't live like this")
+        print("restting as world is not diverse")
         world = generateSeeds(world)
