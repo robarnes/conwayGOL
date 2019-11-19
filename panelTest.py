@@ -53,25 +53,25 @@ def rgbLedMapping(world):
         for colNumber in range(0,48):
             location = (colNumber*16)+(rowNumber-32)+1536
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].location(location)
+            world[rowNumber][colNumber].setLocation(location)
 
     for rowNumber in range(16,32): #middle row, left 16x16 panel
         for colNumber in range(0,16):
             location = (colNumber*16)+(rowNumber-16)+1280
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].location(location)
+            world[rowNumber][colNumber].setLocation(location)
 
     for rowNumber in range(16,32): #middle row, middle 16x16 panel
         for colNumber in range(16,32):
             location = (colNumber*16)+(rowNumber-16)+768
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].location(location)
+            world[rowNumber][colNumber].setLocation(location)
 
     for rowNumber in range(16,32): #middle row, right 16x16 panel
         for colNumber in range(32,48):
             location = (colNumber*16)+(rowNumber-16)+256
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].location(location)
+            world[rowNumber][colNumber].setLocation(location)
 
 #setup NeoPixels
 parser = argparse.ArgumentParser()
