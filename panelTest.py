@@ -58,8 +58,9 @@ def rgbLedMapping(world):
     for rowNumber in range(16,32): #middle row, left 16x16 panel
         for colNumber in range(0,16):
             location = (colNumber*16)+(rowNumber-16)+1280
-            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+            print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
             world[rowNumber][colNumber].setLocation(location)
+            print(world[rowNumber][colNumber].matrixLocation)
 
     for rowNumber in range(16,32): #middle row, middle 16x16 panel
         for colNumber in range(16,32):
@@ -85,7 +86,6 @@ world = rgbLedMapping(world)
 
 while True:
     #displayWorld(world, numOfRows, numOfColumns)
-    print(world(0)(0).matrixLocation)
-    print(world(0)(1).matrixLocation)
-    print(world(0)(2).matrixLocation)
-
+    print(world[0][0].matrixLocation)
+    print(world[0][1].matrixLocation)
+    print(world[0][2].matrixLocation)
