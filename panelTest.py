@@ -25,7 +25,10 @@ class Cell:
     def __init__(self,col,row):
         self.location = [col, row]
         self.genes = "PP"
-        self.cellLocation = 0
+        self.cellID = 0
+
+    def cellID(self,cellID):
+        self.cellID = cellID
 
 def createWorld():
     world = [[Cell(i, j) for i in range(numOfColumns)] for j in range(numOfRows)]  # create the world
@@ -34,41 +37,41 @@ def createWorld():
 def displayWorld(world, numOfRows, numOfColumns):
     for i in range(numOfRows):
         for j in range(numOfColumns):
-            strip.setPixelColor(world[i][j].cellLocation,Color(128,0,128))  #set to purple
+            strip.setPixelColor(world[i][j].cellID,Color(128,0,128))  #set to purple
             strip.show()
             time.sleep(1)
-            strip.setPixelColor(world[i][j].cellLocation,Color(0,0,0))      #turn off for next round
+            strip.setPixelColor(world[i][j].cellID,Color(0,0,0))      #turn off for next round
 
 def rgbLedMapping(world):
     for rowNumber in range(0,16): #top 3 16x16 rgb panels
         for colNumber in range(0,48):
             cellID = (colNumber*16)+rowNumber
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "cellID: ", cellID)
-            world[rowNumber][colNumber].cellLocation = cellID
+            world[rowNumber][colNumber].cellID(cellID)
 
     for rowNumber in range(32,48): #bottom 3 16x16 rgb panels
         for colNumber in range(0,48):
             cellID = (colNumber*16)+(rowNumber-32)+1536
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "cellID: ", cellID)
-            world[rowNumber][colNumber].cellLocation = cellID
+            world[rowNumber][colNumber].cellID(cellID)
 
     for rowNumber in range(16,32): #middle row, left 16x16 panel
         for colNumber in range(0,16):
             cellID = (colNumber*16)+(rowNumber-16)+1280
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "cellID: ", cellID)
-            world[rowNumber][colNumber].cellLocation = cellID
+            world[rowNumber][colNumber].cellID(cellID)
 
     for rowNumber in range(16,32): #middle row, middle 16x16 panel
         for colNumber in range(16,32):
             cellID = (colNumber*16)+(rowNumber-16)+768
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "cellID: ", cellID)
-            world[rowNumber][colNumber].cellLocation = cellID
+            world[rowNumber][colNumber].cellID(cellID)
 
     for rowNumber in range(16,32): #middle row, right 16x16 panel
         for colNumber in range(32,48):
             cellID = (colNumber*16)+(rowNumber-16)+256
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "cellID: ", cellID)
-            world[rowNumber][colNumber].cellLocation = cellID
+            world[rowNumber][colNumber].cellID(cellID)
 
 #setup NeoPixels
 parser = argparse.ArgumentParser()
