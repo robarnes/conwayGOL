@@ -86,7 +86,4 @@ world = createWorld()
 world = rgbLedMapping(world)
 
 while True:
-    #displayWorld(world, numOfRows, numOfColumns)
-    print(world[0][0].matrixLocation)
-    print(world[0][1].matrixLocation)
-    print(world[0][2].matrixLocation)
+    displayWorld(world, numOfRows, numOfColumns)
