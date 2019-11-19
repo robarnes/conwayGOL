@@ -5,17 +5,6 @@ import argparse
 import signal
 import sys
 
-def signal_handler(signal, frame):
-        colorWipe(strip, Color(0,0,0))
-        sys.exit(0)
-
-def opt_parse():
-        parser = argparse.ArgumentParser()
-        parser.add_argument('-c', action='store_true', help='clear the display on exit')
-        args = parser.parse_args()
-        if args.c:
-                signal.signal(signal.SIGINT, signal_handler)
-
 # LED strip configuration:
 LED_COUNT      = 256     # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
@@ -80,6 +69,13 @@ def rgbLedMapping(world):
             cellID = (colNumber*16)+(rowNumber-16)+256
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "cellID: ", cellID)
             world[rowNumber][colNumber].cellLocation = cellID
+
+#setup NeoPixels
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
+args = parser.parse_args()
+strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+strip.begin()
 
 world = createWorld()
 world = rgbLedMapping(world)
