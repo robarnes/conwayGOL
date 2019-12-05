@@ -2,7 +2,31 @@
 # class turorial : https://www.tutorialspoint.com/python/python_classes_objects.htm
 # graphics tutorial : http://anh.cs.luc.edu/python/hands-on/3.1/handsonHtml/graphics.html
 
-from graphics import *
+try:
+    from graphics import *  #otherwise we are probably coding on the pc
+except:
+  print("Graphics library doesn't exist")
+else:
+  neoPixel          = False #set a variable we can check later
+
+try: 
+    from neopixel import *  #lets see if we can get neopixel (tells us we are on the raspberryPi)
+except:
+  print("Neopixel library doesn't exist")
+else:
+    neoPixel        = True   #set a variable we can check later
+    LED_COUNT      = 2304     # Number of LED pixels.
+    LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
+    LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
+    LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
+    LED_BRIGHTNESS = 128     # Set to 0 for darkest and 255 for brightest
+    LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
+    LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
+    LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour ordering
+
+import argparse
+import signal
+import sys
 import time
 import random
 
@@ -20,7 +44,11 @@ class Cell:
         self.age = 0
         self.alive = 0
         self.aliveFuture = 0
- 
+        self.matrixLocation = 0
+
+    def setLocation(self,location):
+        self.matrixLocation = location
+
     def kill(self):
         self.aliveFuture = 0
     
@@ -40,7 +68,6 @@ class Cell:
 def generateSeeds(world):
     time.sleep(5)  # lets pause and reflect before we reset the world
     world = createWorld()  # create the world
-    displayWorld(world) # display the world (used to clear the screen)
 
     # lets seed the world with about 20%
     numberOfSeeds = int((numOfColumns*numOfRows)*.2)
@@ -60,10 +87,6 @@ def generateSeeds(world):
 def createWorld():
     world = [[Cell(i, j) for i in range(numOfColumns)] for j in range(numOfRows)]  # create the world
     return world
-
-def displayWorld(world):
-    #will do something here someday
-    time.sleep(.1)
 
 def checkDiversity(world, numOfRows, numOfColumns):
     purpleCount = 0
@@ -416,15 +439,70 @@ def draw(world, numOfRows, numOfColumns, win):
                 #dot.setFill("white")
             #dot.draw(win)
     time.sleep(.5)
+
+def rgbLedMapping(world):
+    for rowNumber in range(0,16): #top 3 16x16 rgb panels
+        for colNumber in range(0,48):
+            location = (colNumber*16)+rowNumber
+            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+            world[rowNumber][colNumber].setLocation(location)
+
+    for rowNumber in range(32,48): #bottom 3 16x16 rgb panels
+        for colNumber in range(0,48):
+            location = (colNumber*16)+(rowNumber-32)+1536
+            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+            world[rowNumber][colNumber].setLocation(location)
+
+    for rowNumber in range(16,32): #middle row, left 16x16 panel
+        for colNumber in range(0,16):
+            location = (colNumber*16)+(rowNumber-16)+1280
+            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+            world[rowNumber][colNumber].setLocation(location)
             
-win = GraphWin('planet', numOfRows*8, numOfColumns*8) # give title and dimensions of the graphical window/display
+    for rowNumber in range(16,32): #middle row, middle 16x16 panel
+        for colNumber in range(16,32):
+            location = (colNumber*16)+(rowNumber-16)+768
+            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+            world[rowNumber][colNumber].setLocation(location)
+
+    for rowNumber in range(16,32): #middle row, right 16x16 panel
+        for colNumber in range(32,48):
+            location = (colNumber*16)+(rowNumber-16)+256
+            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+            world[rowNumber][colNumber].setLocation(location)
+
+    return world
+
+def drawNeoPixel(world, numOfRows, numOfColumns):
+    for i in range(numOfRows):
+        for j in range(numOfColumns):
+            strip.setPixelColor(world[i][j].matrixLocation,Color(128,0,128))  #set to purple
+            strip.show()
+            time.sleep(.3)
+            strip.setPixelColor(world[i][j].matrixLocation,Color(0,0,0))      #turn off for next round
+
+
+if neoPixel:
+    #setup NeoPixels
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
+    args = parser.parse_args()
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+    strip.begin()
+else:
+    win = GraphWin('planet', numOfRows*8, numOfColumns*8) # give title and dimensions of the graphical window/display
+
 world = createWorld()
 world = generateSeeds(world)
+world = rgbLedMapping(world)
 
 while True:
     world = runSimulation(world, numOfRows, numOfColumns) # see who lives, dies, who is born (but don't kill cells until we check all of them)
     world = nextRound(world, numOfRows, numOfColumns) # advance the cell status for next round (ie flag as born/dead)
-    draw(world, numOfRows, numOfColumns, win) # display the outcome
+    if neoPixel:
+        drawNeoPixel(world, numOfRows, numOfColumns) # display the outcome on neopixel display
+    else:
+        draw(world, numOfRows, numOfColumns, win) # display the outcome using graphics library
     cellCount, stableCycleCount = checkStable(world, numOfRows, numOfColumns, cellCount, stableCycleCount)
     if stableCycleCount > 20 :
         print("resetting as world is stagnant")
