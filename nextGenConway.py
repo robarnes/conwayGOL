@@ -460,6 +460,7 @@ def drawNeoPixel(world, numOfRows, numOfColumns):
                     print("missing some important genetic info in drawNeoPixel()")
             else:
                 strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,0,0))      #if dead turn off
+    strip.show()
 
 def rgbLedMapping(world):
     location = 0
