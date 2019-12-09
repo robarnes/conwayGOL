@@ -445,21 +445,21 @@ def drawNeoPixel(world, numOfRows, numOfColumns):
         for colNumber in range(numOfColumns):
             if world[rowNumber][colNumber].alive:
                 if world[rowNumber][colNumber].genes == 'PP':
-                    strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
+                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
                 elif world[rowNumber][colNumber].genes == 'GG':
-                    strip.setPixelColor(rgbMap[i][j],Color(0,128,0)) #if alive set green using the cell to rgb pixel map
+                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,128,0)) #if alive set green using the cell to rgb pixel map
                 elif world[rowNumber][colNumber].genes == 'PG':
-                    strip.setPixelColor(rgbMap[i][j],Color(0,0,128)) #if alive set blue using the cell to rgb pixel map 
+                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,0,128)) #if alive set blue using the cell to rgb pixel map 
                 elif world[rowNumber][colNumber].genes == 'oo':
-                    strip.setPixelColor(rgbMap[i][j],Color(128,80,0)) #if alive set orange using the cell to rgb pixel map 
+                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,80,0)) #if alive set orange using the cell to rgb pixel map 
                 elif world[rowNumber][colNumber].genes == 'Po':
-                    strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set purple using the cell to rgb pixel map
+                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map
                 elif world[rowNumber][colNumber].genes == 'Go':
-                    strip.setPixelColor(rgbMap[i][j],Color(0,128,0)) #if alive set green using the cell to rgb pixel map 
+                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,128,0)) #if alive set green using the cell to rgb pixel map 
                 else:
-                    print("missing somee important genetic info in drawNeoPixel()")
+                    print("missing some important genetic info in drawNeoPixel()")
             else:
-                strip.setPixelColor(rgbMap[i][j],Color(0,0,0))      #if dead turn off
+                strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,0,0))      #if dead turn off
 
 def rgbLedMapping(world):
     location = 0
