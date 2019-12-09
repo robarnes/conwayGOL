@@ -22,7 +22,7 @@ else:
     LED_BRIGHTNESS = 128     # Set to 0 for darkest and 255 for brightest
     LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
     LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
-    LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour ordering
+    LED_STRIP      = ws.WS2811_STRIP_RGB   # Strip type and colour ordering
 
 import argparse
 import signal
@@ -440,6 +440,27 @@ def draw(world, numOfRows, numOfColumns, win):
             #dot.draw(win)
     time.sleep(.5)
 
+def drawNeoPixel(world, numOfRows, numOfColumns):
+    for rowNumber in range(numOfRows):
+        for colNumber in range(numOfColumns):
+            if world[rowNumber][colNumber].alive:
+                if world[rowNumber][colNumber].genes == 'PP':
+                    strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
+                elif world[rowNumber][colNumber].genes == 'GG':
+                    strip.setPixelColor(rgbMap[i][j],Color(0,128,0)) #if alive set green using the cell to rgb pixel map
+                elif world[rowNumber][colNumber].genes == 'PG':
+                    strip.setPixelColor(rgbMap[i][j],Color(0,0,128)) #if alive set blue using the cell to rgb pixel map 
+                elif world[rowNumber][colNumber].genes == 'oo':
+                    strip.setPixelColor(rgbMap[i][j],Color(128,80,0)) #if alive set orange using the cell to rgb pixel map 
+                elif world[rowNumber][colNumber].genes == 'Po':
+                    strip.setPixelColor(rgbMap[i][j],Color(128,0,128)) #if alive set purple using the cell to rgb pixel map
+                elif world[rowNumber][colNumber].genes == 'Go':
+                    strip.setPixelColor(rgbMap[i][j],Color(0,128,0)) #if alive set green using the cell to rgb pixel map 
+                else:
+                    print("missing somee important genetic info in drawNeoPixel()")
+            else:
+                strip.setPixelColor(rgbMap[i][j],Color(0,0,0))      #if dead turn off
+
 def rgbLedMapping(world):
     location = 0
     colNumber = 0
@@ -512,14 +533,6 @@ def rgbLedMapping(world):
                 location += 1
             colNumber += 1
     return world
-
-def drawNeoPixel(world, numOfRows, numOfColumns):
-    for i in range(numOfRows):
-        for j in range(numOfColumns):
-            strip.setPixelColor(world[i][j].matrixLocation,Color(128,0,128))  #set to purple
-            strip.show()
-            time.sleep(.3)
-            strip.setPixelColor(world[i][j].matrixLocation,Color(0,0,0))      #turn off for next round
 
 if neoPixel:
     #setup NeoPixels
