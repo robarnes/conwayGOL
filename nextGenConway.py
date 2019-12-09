@@ -67,7 +67,6 @@ class Cell:
 
 def generateSeeds(world):
     time.sleep(5)  # lets pause and reflect before we reset the world
-    world = createWorld()  # create the world
 
     # lets seed the world with about 20%
     numberOfSeeds = int((numOfColumns*numOfRows)*.2)
@@ -560,6 +559,8 @@ while True:
     if stableCycleCount > 20 :
         print("resetting as world is stagnant")
         world = generateSeeds(world)
+        stableCycleCount = 0
     if checkDiversity(world, numOfRows, numOfColumns) == False: # if noone is alive, or only one color is alive, then restart
         print("restting as world is not diverse")
         world = generateSeeds(world)
+        stableCycleCount = 0
