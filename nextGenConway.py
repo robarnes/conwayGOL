@@ -441,36 +441,76 @@ def draw(world, numOfRows, numOfColumns, win):
     time.sleep(.5)
 
 def rgbLedMapping(world):
-    for rowNumber in range(0,16): #top 3 16x16 rgb panels
-        for colNumber in range(0,48):
-            location = (colNumber*16)+rowNumber
+    location = 0
+    colNumber = 0
+    while colNumber < 48: #top 3 16x16 rgb panels
+        for rowNumber in range(0,16):
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
             world[rowNumber][colNumber].setLocation(location)
+            location += 1
+        colNumber += 1
+        if colNumber <= 47: #don't overrun the matrix
+            for rowNumber in range(15,-1,-1):
+                #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+                world[rowNumber][colNumber].setLocation(location)
+                location += 1
+            colNumber += 1
+ 
+    colNumber = 32
+    while colNumber < 48: #middle row, right 16x16 panel
+        for rowNumber in range(16,32):
+            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+            world[rowNumber][colNumber].setLocation(location)
+            location += 1
+        colNumber += 1
+        if colNumber <= 47: #don't overrun the matrix
+            for rowNumber in range(31,15,-1):
+                #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+                world[rowNumber][colNumber].setLocation(location)
+                location += 1
+            colNumber += 1
+ 
+    colNumber = 16
+    while colNumber < 32: #middle row, right 16x16 panel
+        for rowNumber in range(16,32):
+            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+            world[rowNumber][colNumber].setLocation(location)
+            location += 1
+        colNumber += 1
+        if colNumber <= 47: #don't overrun the matrix
+            for rowNumber in range(31,15,-1):
+                #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+                world[rowNumber][colNumber].setLocation(location)
+                location += 1
+            colNumber += 1
 
-    for rowNumber in range(32,48): #bottom 3 16x16 rgb panels
-        for colNumber in range(0,48):
-            location = (colNumber*16)+(rowNumber-32)+1536
+    colNumber = 0
+    while colNumber < 16: #middle row, left 16x16 panel
+        for rowNumber in range(16,32):
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
             world[rowNumber][colNumber].setLocation(location)
+            location += 1
+        colNumber += 1
+        if colNumber <= 47: #don't overrun the matrix
+            for rowNumber in range(31,15,-1):
+                #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+                world[rowNumber][colNumber].setLocation(location)
+                location += 1
+            colNumber += 1
 
-    for rowNumber in range(16,32): #middle row, left 16x16 panel
-        for colNumber in range(0,16):
-            location = (colNumber*16)+(rowNumber-16)+1280
+    colNumber = 0
+    while colNumber < 48:  #bottom 3 16x16 rgb panels
+        for rowNumber in range(32,48):
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
             world[rowNumber][colNumber].setLocation(location)
-            
-    for rowNumber in range(16,32): #middle row, middle 16x16 panel
-        for colNumber in range(16,32):
-            location = (colNumber*16)+(rowNumber-16)+768
-            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].setLocation(location)
-
-    for rowNumber in range(16,32): #middle row, right 16x16 panel
-        for colNumber in range(32,48):
-            location = (colNumber*16)+(rowNumber-16)+256
-            #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].setLocation(location)
-
+            location += 1
+        colNumber += 1
+        if colNumber <= 47: #don't overrun the matrix
+            for rowNumber in range(47,31,-1):
+                #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
+                world[rowNumber][colNumber].setLocation(location)
+                location += 1
+            colNumber += 1
     return world
 
 def drawNeoPixel(world, numOfRows, numOfColumns):
@@ -480,7 +520,6 @@ def drawNeoPixel(world, numOfRows, numOfColumns):
             strip.show()
             time.sleep(.3)
             strip.setPixelColor(world[i][j].matrixLocation,Color(0,0,0))      #turn off for next round
-
 
 if neoPixel:
     #setup NeoPixels
