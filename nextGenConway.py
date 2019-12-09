@@ -10,7 +10,7 @@ else:
   neoPixel          = False #set a variable we can check later
 
 try: 
-    from neopixel import *  #lets see if we can get neopixel (tells us we are on the raspberryPi)
+    from rpi_ws281x import *  #lets see if we can get neopixel (tells us we are on the raspberryPi)
 except:
   print("Neopixel library doesn't exist")
 else:
@@ -22,7 +22,7 @@ else:
     LED_BRIGHTNESS = 128     # Set to 0 for darkest and 255 for brightest
     LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
     LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
-    LED_STRIP      = ws.WS2811_STRIP_RGB   # Strip type and colour ordering
+    STRIP_TYPE     = rpi_ws281x.ws.WS2811_STRIP_GRB
 
 import argparse
 import signal
@@ -540,7 +540,7 @@ if neoPixel:
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
-    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, STRIP_TYPE)
     strip.begin()
 else:
     win = GraphWin('planet', numOfRows*8, numOfColumns*8) # give title and dimensions of the graphical window/display
