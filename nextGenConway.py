@@ -30,8 +30,8 @@ import sys
 import time
 import random
 
-numOfColumns = 48 #what can we see on your display
-numOfRows = 48    #what can we see on your display
+numOfColumns = 68 #what can we see on your display
+numOfRows = 68    #what can we see on your display
 cellCount = 0     #used to track cell counts between rounds.  Used to catch 'stable' configurations
 stableCycleCount = 0 #used to track how many rounds the cell count has been stable/stagnant
 
@@ -416,8 +416,8 @@ def draw(world, numOfRows, numOfColumns, win):
     for item in win.items[:]:
         item.undraw()
     win.update()
-    for rowNumber in range(numOfRows):
-        for colNumber in range(numOfColumns):
+    for rowNumber in range(10,numOfRows-10): # we are chopping 10 rows/cols off the world.  Life 'offscreen' makes simulation look better
+        for colNumber in range(10,numOfColumns-10):
             if world[rowNumber][colNumber].alive:
                 dot = Circle(Point((rowNumber*8)+4, (colNumber*8)+4),4)
                 if world[rowNumber][colNumber].genes == 'PP':
@@ -442,8 +442,8 @@ def draw(world, numOfRows, numOfColumns, win):
             #dot.draw(win)
 
 def drawNeoPixel(world, numOfRows, numOfColumns):
-    for rowNumber in range(numOfRows):
-        for colNumber in range(numOfColumns):
+    for rowNumber in range(10,numOfRows-10):
+        for colNumber in range(10,numOfColumns-10):
             if world[rowNumber][colNumber].alive:
                 if world[rowNumber][colNumber].genes == 'PP':
                     strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
@@ -466,16 +466,17 @@ def drawNeoPixel(world, numOfRows, numOfColumns):
 def rgbLedMapping(world):
     location = 0
     colNumber = 0
+    # all the +10 shennanigans are an offset so part of the simulation is 'offscreen'
     while colNumber < 48: #top 3 16x16 rgb panels
         for rowNumber in range(0,16):
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].setLocation(location)
+            world[rowNumber+10][colNumber+10].setLocation(location)
             location += 1
         colNumber += 1
         if colNumber <= 47: #don't overrun the matrix
             for rowNumber in range(15,-1,-1):
                 #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-                world[rowNumber][colNumber].setLocation(location)
+                world[rowNumber+10][colNumber+10].setLocation(location)
                 location += 1
             colNumber += 1
  
@@ -483,13 +484,13 @@ def rgbLedMapping(world):
     while colNumber < 48: #middle row, right 16x16 panel
         for rowNumber in range(16,32):
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].setLocation(location)
+            world[rowNumber+10][colNumber+10].setLocation(location)
             location += 1
         colNumber += 1
         if colNumber <= 47: #don't overrun the matrix
             for rowNumber in range(31,15,-1):
                 #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-                world[rowNumber][colNumber].setLocation(location)
+                world[rowNumber+10][colNumber+10].setLocation(location)
                 location += 1
             colNumber += 1
  
@@ -497,13 +498,13 @@ def rgbLedMapping(world):
     while colNumber < 32: #middle row, right 16x16 panel
         for rowNumber in range(16,32):
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].setLocation(location)
+            world[rowNumber+10][colNumber+10].setLocation(location)
             location += 1
         colNumber += 1
         if colNumber <= 47: #don't overrun the matrix
             for rowNumber in range(31,15,-1):
                 #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-                world[rowNumber][colNumber].setLocation(location)
+                world[rowNumber+10][colNumber+10].setLocation(location)
                 location += 1
             colNumber += 1
 
@@ -511,13 +512,13 @@ def rgbLedMapping(world):
     while colNumber < 16: #middle row, left 16x16 panel
         for rowNumber in range(16,32):
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].setLocation(location)
+            world[rowNumber+10][colNumber+10].setLocation(location)
             location += 1
         colNumber += 1
         if colNumber <= 47: #don't overrun the matrix
             for rowNumber in range(31,15,-1):
                 #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-                world[rowNumber][colNumber].setLocation(location)
+                world[rowNumber+10][colNumber+10].setLocation(location)
                 location += 1
             colNumber += 1
 
@@ -525,13 +526,13 @@ def rgbLedMapping(world):
     while colNumber < 48:  #bottom 3 16x16 rgb panels
         for rowNumber in range(32,48):
             #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-            world[rowNumber][colNumber].setLocation(location)
+            world[rowNumber+10][colNumber+10].setLocation(location)
             location += 1
         colNumber += 1
         if colNumber <= 47: #don't overrun the matrix
             for rowNumber in range(47,31,-1):
                 #print("rowNumber: ", rowNumber, "colNumber: ", colNumber, "location: ", location)
-                world[rowNumber][colNumber].setLocation(location)
+                world[rowNumber+10][colNumber+10].setLocation(location)
                 location += 1
             colNumber += 1
     return world
