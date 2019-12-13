@@ -388,8 +388,11 @@ def checkStable(world, numOfRows, numOfColumns, lastCellCount, stableCycleCount)
     for rowNumber in range(numOfRows):
         for colNumber in range(numOfColumns):
             cellCount = cellCount + world[rowNumber][colNumber].alive #add one to the counter if alive
-    if lastCellCount == cellCount:
+    if lastCellCount == cellCount:  #likely all stable formations
         stableCycleCount = stableCycleCount + 1
+    elif (lastCellCount + 4 == cellCount) or (lastCellCount + 8 == cellCount) or (lastCellCount - 12 == cellCount): # likly pulsar formations
+        stableCycleCount = stableCycleCount + 1
+        print("Potential pulsar detected")
     else:
         stableCycleCount = 0
     return cellCount, stableCycleCount
@@ -437,7 +440,6 @@ def draw(world, numOfRows, numOfColumns, win):
                 #dot = Circle(Point((rowNumber*8)+4, (colNumber*8)+4),4)
                 #dot.setFill("white")
             #dot.draw(win)
-    time.sleep(.5)
 
 def drawNeoPixel(world, numOfRows, numOfColumns):
     for rowNumber in range(numOfRows):
