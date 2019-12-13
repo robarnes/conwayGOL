@@ -35,6 +35,10 @@ numOfRows = 68    #what can we see on your display
 cellCount = 0     #used to track cell counts between rounds.  Used to catch 'stable' configurations
 stableCycleCount = 0 #used to track how many rounds the cell count has been stable/stagnant
 
+current_milli_time = int(round(time.time() * 1000))  #these are used to update display at pre-ordained intervals
+last_milli_time = int(round(time.time() * 1000))
+updateRate = 1000 #how often do we update display (in milliseconds)
+
 class Cell:
     'Common base class for all cells'
  
@@ -392,7 +396,6 @@ def checkStable(world, numOfRows, numOfColumns, lastCellCount, stableCycleCount)
         stableCycleCount = stableCycleCount + 1
     elif (lastCellCount + 4 == cellCount) or (lastCellCount + 8 == cellCount) or (lastCellCount - 12 == cellCount): # likly pulsar formations
         stableCycleCount = stableCycleCount + 1
-        print("Potential pulsar detected")
     else:
         stableCycleCount = 0
     return cellCount, stableCycleCount
@@ -567,3 +570,12 @@ while True:
         print("restting as world is not diverse")
         world = generateSeeds(world)
         stableCycleCount = 0
+    #manage the speed of the simulation
+    current_milli_time = int(round(time.time() * 1000))  
+    sleepTime = updateRate - (current_milli_time - last_milli_time)
+    sleepTime = sleepTime * .001 #converting from millisconds to seconds for sleep function
+    if (sleepTime < 0): #if we are behind schedule, don't sleep
+        sleepTime = 0
+    print("Sleep time: ", sleepTime)
+    time.sleep(sleepTime)
+    last_milli_time = int(round(time.time() * 1000))
