@@ -34,13 +34,34 @@ import paho.mqtt.client as mqtt
 #setting up MQTT
 broker_url = "mqtt.widgetninja.net"
 broker_port = 1883
+
+def on_connect(client, userdata, flags, rc):
+   #print("Connected With Result Code: {}".format(rc))
+   client.subscribe("test/test1")
+
+def on_message(client, userdata, message):
+    print("message received " ,str(message.payload.decode("utf-8")))
+    print("message topic=",message.topic)
+    print("message qos=",message.qos)
+    print("message retain flag=",message.retain)
+
+def on_log(client, userdata, level, buf):
+    print("log: ",buf)
+
 client = mqtt.Client("GameOfLife")
 client.username_pw_set(username="anonymous",password="anonymous")
-client.loop_start()
+
 try:
     client.connect(broker_url, broker_port)
 except:
-    print("MQTT Connection Failed")
+    print("MQTT Connection failed")
+
+client.on_connect = on_connect
+client.on_message = on_message
+#client.on_log=on_log
+
+client.loop_start()
+#client.loop_forever()
 
 numOfColumns = 68 #what can we see on your display
 numOfRows = 68    #what can we see on your display
@@ -574,7 +595,7 @@ while True:
     else:
         draw(world, numOfRows, numOfColumns, win) # display the outcome using graphics library
     cellCount, stableCycleCount = checkStable(world, numOfRows, numOfColumns, cellCount, stableCycleCount)
-    print("CellCount: ", cellCount)
+    #print("CellCount: ", cellCount)
     if stableCycleCount > 20 :
         print("resetting as world is stagnant")
         world = generateSeeds(world)
@@ -584,7 +605,7 @@ while True:
         world = generateSeeds(world)
         stableCycleCount = 0
     #publish some updates to MQTT
-    client.publish(topic="gameOfLife", payload=cellCount, qos=0, retain=False)
+    #client.publish(topic="gameOfLife/cellCount", payload=cellCount, qos=0, retain=False)
     
     #manage the speed of the simulation
     current_milli_time = int(round(time.time() * 1000))  
