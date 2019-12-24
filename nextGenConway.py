@@ -562,6 +562,7 @@ while True:
     else:
         draw(world, numOfRows, numOfColumns, win) # display the outcome using graphics library
     cellCount, stableCycleCount = checkStable(world, numOfRows, numOfColumns, cellCount, stableCycleCount)
+    print("CellCount: ", cellCount)
     if stableCycleCount > 20 :
         print("resetting as world is stagnant")
         world = generateSeeds(world)
@@ -576,6 +577,6 @@ while True:
     sleepTime = sleepTime * .001 #converting from millisconds to seconds for sleep function
     if (sleepTime < 0): #if we are behind schedule, don't sleep
         sleepTime = 0
-    print("Sleep time: ", sleepTime)
+    #print("Sleep time: ", sleepTime)
     time.sleep(sleepTime)
     last_milli_time = int(round(time.time() * 1000))
