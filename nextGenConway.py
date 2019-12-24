@@ -29,6 +29,18 @@ import signal
 import sys
 import time
 import random
+import paho.mqtt.client as mqtt
+
+#setting up MQTT
+broker_url = "mqtt.widgetninja.net"
+broker_port = 1883
+client = mqtt.Client("GameOfLife")
+client.username_pw_set(username="anonymous",password="anonymous")
+client.loop_start()
+try:
+    client.connect(broker_url, broker_port)
+except:
+    print("MQTT Connection Failed")
 
 numOfColumns = 68 #what can we see on your display
 numOfRows = 68    #what can we see on your display
@@ -571,6 +583,9 @@ while True:
         print("restting as world is not diverse")
         world = generateSeeds(world)
         stableCycleCount = 0
+    #publish some updates to MQTT
+    client.publish(topic="gameOfLife", payload=cellCount, qos=0, retain=False)
+    
     #manage the speed of the simulation
     current_milli_time = int(round(time.time() * 1000))  
     sleepTime = updateRate - (current_milli_time - last_milli_time)
