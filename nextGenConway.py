@@ -37,13 +37,16 @@ broker_port = 1883
 
 def on_connect(client, userdata, flags, rc):
    #print("Connected With Result Code: {}".format(rc))
-   client.subscribe("test/test1")
+   client.subscribe("gameOfLife/reset")
 
 def on_message(client, userdata, message):
-    print("message received " ,str(message.payload.decode("utf-8")))
-    print("message topic=",message.topic)
-    print("message qos=",message.qos)
-    print("message retain flag=",message.retain)
+    global mqttReset
+    #print("message received " ,str(message.payload.decode("utf-8")))
+    #rint("message topic=",message.topic)
+    #print("message qos=",message.qos)
+    #print("message retain flag=",message.retain)
+    if (str(message.payload.decode("utf-8")) == "reset"): # did we get an MQTT message to reset?
+        mqttReset = 1
 
 def on_log(client, userdata, level, buf):
     print("log: ",buf)
@@ -67,6 +70,7 @@ numOfColumns = 68 #what can we see on your display
 numOfRows = 68    #what can we see on your display
 cellCount = 0     #used to track cell counts between rounds.  Used to catch 'stable' configurations
 stableCycleCount = 0 #used to track how many rounds the cell count has been stable/stagnant
+mqttReset = 0     #used to call world reset via MQTT
 
 current_milli_time = int(round(time.time() * 1000))  #these are used to update display at pre-ordained intervals
 last_milli_time = int(round(time.time() * 1000))
@@ -596,14 +600,16 @@ while True:
         draw(world, numOfRows, numOfColumns, win) # display the outcome using graphics library
     cellCount, stableCycleCount = checkStable(world, numOfRows, numOfColumns, cellCount, stableCycleCount)
     #print("CellCount: ", cellCount)
-    if stableCycleCount > 20 :
-        print("resetting as world is stagnant")
+    if stableCycleCount > 20 : #world is boring / cyclic
         world = generateSeeds(world)
         stableCycleCount = 0
-    if checkDiversity(world, numOfRows, numOfColumns) == False: # if noone is alive, or only one color is alive, then restart
-        print("restting as world is not diverse")
+    elif checkDiversity(world, numOfRows, numOfColumns) == False: # if noone is alive, or only one color is alive, then restart
         world = generateSeeds(world)
         stableCycleCount = 0
+    elif mqttReset == 1: #message via MQTT to reset
+        world = generateSeeds(world)
+        stableCycleCount = 0
+        mqttReset = 0
     #publish some updates to MQTT
     #client.publish(topic="gameOfLife/cellCount", payload=cellCount, qos=0, retain=False)
     
