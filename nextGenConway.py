@@ -37,7 +37,7 @@ broker_port = 1883
 
 def on_connect(client, userdata, flags, rc):
    #print("Connected With Result Code: {}".format(rc))
-   client.subscribe("gameOfLife/reset")
+   client.subscribe("gameOfLife")
 
 def on_message(client, userdata, message):
     global mqttReset
