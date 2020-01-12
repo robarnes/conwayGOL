@@ -75,7 +75,7 @@ numOfRows = 68    #what can we see on your display
 cellCount = 0     #used to track cell counts between rounds.  Used to catch 'stable' configurations
 stableCycleCount = 0 #used to track how many rounds the cell count has been stable/stagnant
 mqttReset = 0     #used to call world reset via MQTT
-gameMode = 0      #used to decide to show age-based(0) or genetic(1) based cells
+gameMode = 1      #used to decide to show age-based(0) or genetic(1) based cells
 
 current_milli_time = int(round(time.time() * 1000))  #these are used to update display at pre-ordained intervals
 last_milli_time = int(round(time.time() * 1000))
@@ -471,26 +471,26 @@ def draw(world, numOfRows, numOfColumns, win, gameMode):
                 dot = Circle(Point((rowNumber*8)+4, (colNumber*8)+4),4)
                 if gameMode == 0: #show cells based on age
                     if world[rowNumber][colNumber].age > 60:
-                        dot.setFill("cyan") #if alive set blue using the cell to rgb pixel map
+                        dot.setFill("red") #if alive set red using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 15:
-                        dot.setFill("red") #if alive set blue using the cell to rgb pixel map
+                        dot.setFill("cyan") #if alive set cyan using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 5:
-                        dot.setFill("yellow") #if alive set blue using the cell to rgb pixel map
+                        dot.setFill("yellow") #if alive set yellow using the cell to rgb pixel map
                     else:
-                        dot.setFill("brown") #if alive set brown using the cell to rgb pixel map
+                        dot.setFill("orange") #if alive set orange using the cell to rgb pixel map
                 elif gameMode == 1: #show cells based on genetics
                     if world[rowNumber][colNumber].genes == 'PP':
-                        dot.setFill("purple")
+                        dot.setFill("red")
                     elif world[rowNumber][colNumber].genes == 'GG':
-                        dot.setFill("green")
+                        dot.setFill("cyan")
                     elif world[rowNumber][colNumber].genes == 'PG':
-                        dot.setFill("blue")
+                        dot.setFill("yellow")
                     elif world[rowNumber][colNumber].genes == 'oo':
                         dot.setFill("orange")
                     elif world[rowNumber][colNumber].genes == 'Po':
-                        dot.setFill("purple")
+                        dot.setFill("red")
                     elif world[rowNumber][colNumber].genes == 'Go':
-                        dot.setFill("green")
+                        dot.setFill("cyan")
                     else:
                         print("missing somee important genetic info in draw()")
                         dot.setFill("yellow")
@@ -506,26 +506,26 @@ def drawNeoPixel(world, numOfRows, numOfColumns, gameMode):
             if world[rowNumber][colNumber].alive:
                 if gameMode == 0: #show cells based on age
                     if world[rowNumber][colNumber].age > 60:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set blue using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 15:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set blue using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set cyan using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 5:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set blue using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set yellow using the cell to rgb pixel map
                     else:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(165,42,42)) #if alive set brown using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(255,140,0)) #if alive set orange using the cell to rgb pixel map
                 elif gameMode == 1: #show cells based on genetics
                     if world[rowNumber][colNumber].genes == 'PP':
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map 
                     elif world[rowNumber][colNumber].genes == 'GG':
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,128,0)) #if alive set green using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set cyan using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].genes == 'PG':
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,0,128)) #if alive set blue using the cell to rgb pixel map 
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set yellow using the cell to rgb pixel map 
                     elif world[rowNumber][colNumber].genes == 'oo':
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,80,0)) #if alive set orange using the cell to rgb pixel map 
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(255,140,0)) #if alive set orange using the cell to rgb pixel map 
                     elif world[rowNumber][colNumber].genes == 'Po':
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].genes == 'Go':
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,128,0)) #if alive set green using the cell to rgb pixel map 
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set cyan using the cell to rgb pixel map 
                     else:
                         print("missing some important genetic info in drawNeoPixel()")
             else:
