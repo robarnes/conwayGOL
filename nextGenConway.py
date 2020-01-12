@@ -2,6 +2,10 @@
 # class turorial : https://www.tutorialspoint.com/python/python_classes_objects.htm
 # graphics tutorial : http://anh.cs.luc.edu/python/hands-on/3.1/handsonHtml/graphics.html
 
+#required libraries:
+#pip install graphics.py
+#pip install paho-mqtt
+
 try:
     from graphics import *  #otherwise we are probably coding on the pc
 except:
@@ -42,7 +46,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, message):
     global mqttReset
     #print("message received " ,str(message.payload.decode("utf-8")))
-    #rint("message topic=",message.topic)
+    #print("message topic=",message.topic)
     #print("message qos=",message.qos)
     #print("message retain flag=",message.retain)
     if (str(message.payload.decode("utf-8")) == "reset"): # did we get an MQTT message to reset?
@@ -71,6 +75,7 @@ numOfRows = 68    #what can we see on your display
 cellCount = 0     #used to track cell counts between rounds.  Used to catch 'stable' configurations
 stableCycleCount = 0 #used to track how many rounds the cell count has been stable/stagnant
 mqttReset = 0     #used to call world reset via MQTT
+gameMode = 0      #used to decide to show age-based(0) or genetic(1) based cells
 
 current_milli_time = int(round(time.time() * 1000))  #these are used to update display at pre-ordained intervals
 last_milli_time = int(round(time.time() * 1000))
@@ -106,8 +111,12 @@ class Cell:
     def nextRound(self):
         self.alive = self.aliveFuture
 
-def generateSeeds(world):
+def generateSeeds(world, gameMode):
     time.sleep(5)  # lets pause and reflect before we reset the world
+    if gameMode == 1: #toggle the game mode every cycle
+        gameMode == 0
+    else:
+        gameMode == 1
 
     # lets seed the world with about 20%
     numberOfSeeds = int((numOfColumns*numOfRows)*.2)
@@ -122,7 +131,7 @@ def generateSeeds(world):
         elif geneticOutcome == 2:
             world[seedRow][seedCol].setGenes("oo")  # Team Orange!
         world[seedRow][seedCol].alive = 1 #make the cell alive
-    return world
+    return world, gameMode
 
 def createWorld():
     world = [[Cell(i, j) for i in range(numOfColumns)] for j in range(numOfRows)]  # create the world
@@ -451,7 +460,7 @@ def runSimulation(world, numOfRows,numOfColumns):
                 world[rowNumber][colNumber].birthday() #if alive, age a year
     return world
 
-def draw(world, numOfRows, numOfColumns, win):
+def draw(world, numOfRows, numOfColumns, win, gameMode):
     #this function used for testing, drawing on screen instead of NEOPIXEL display
     for item in win.items[:]:
         item.undraw()
@@ -460,45 +469,65 @@ def draw(world, numOfRows, numOfColumns, win):
         for colNumber in range(10,numOfColumns-10):
             if world[rowNumber][colNumber].alive:
                 dot = Circle(Point((rowNumber*8)+4, (colNumber*8)+4),4)
-                if world[rowNumber][colNumber].genes == 'PP':
-                    dot.setFill("purple")
-                elif world[rowNumber][colNumber].genes == 'GG':
-                    dot.setFill("green")
-                elif world[rowNumber][colNumber].genes == 'PG':
-                    dot.setFill("blue")
-                elif world[rowNumber][colNumber].genes == 'oo':
-                    dot.setFill("orange")
-                elif world[rowNumber][colNumber].genes == 'Po':
-                    dot.setFill("purple")
-                elif world[rowNumber][colNumber].genes == 'Go':
-                    dot.setFill("green")
-                else:
-                    print("missing somee important genetic info in draw()")
-                    dot.setFill("yellow")
+                if gameMode == 0: #show cells based on age
+                    if world[rowNumber][colNumber].age > 60:
+                        dot.setFill("cyan") #if alive set blue using the cell to rgb pixel map
+                    elif world[rowNumber][colNumber].age > 15:
+                        dot.setFill("red") #if alive set blue using the cell to rgb pixel map
+                    elif world[rowNumber][colNumber].age > 5:
+                        dot.setFill("yellow") #if alive set blue using the cell to rgb pixel map
+                    else:
+                        dot.setFill("brown") #if alive set brown using the cell to rgb pixel map
+                elif gameMode == 1: #show cells based on genetics
+                    if world[rowNumber][colNumber].genes == 'PP':
+                        dot.setFill("purple")
+                    elif world[rowNumber][colNumber].genes == 'GG':
+                        dot.setFill("green")
+                    elif world[rowNumber][colNumber].genes == 'PG':
+                        dot.setFill("blue")
+                    elif world[rowNumber][colNumber].genes == 'oo':
+                        dot.setFill("orange")
+                    elif world[rowNumber][colNumber].genes == 'Po':
+                        dot.setFill("purple")
+                    elif world[rowNumber][colNumber].genes == 'Go':
+                        dot.setFill("green")
+                    else:
+                        print("missing somee important genetic info in draw()")
+                        dot.setFill("yellow")
                 dot.draw(win) # remove this line if you enable the ELSE below
             #else:
                 #dot = Circle(Point((rowNumber*8)+4, (colNumber*8)+4),4)
                 #dot.setFill("white")
             #dot.draw(win)
 
-def drawNeoPixel(world, numOfRows, numOfColumns):
+def drawNeoPixel(world, numOfRows, numOfColumns, gameMode):
     for rowNumber in range(10,numOfRows-10):
         for colNumber in range(10,numOfColumns-10):
             if world[rowNumber][colNumber].alive:
-                if world[rowNumber][colNumber].genes == 'PP':
-                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
-                elif world[rowNumber][colNumber].genes == 'GG':
-                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,128,0)) #if alive set green using the cell to rgb pixel map
-                elif world[rowNumber][colNumber].genes == 'PG':
-                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,0,128)) #if alive set blue using the cell to rgb pixel map 
-                elif world[rowNumber][colNumber].genes == 'oo':
-                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,80,0)) #if alive set orange using the cell to rgb pixel map 
-                elif world[rowNumber][colNumber].genes == 'Po':
-                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map
-                elif world[rowNumber][colNumber].genes == 'Go':
-                    strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,128,0)) #if alive set green using the cell to rgb pixel map 
-                else:
-                    print("missing some important genetic info in drawNeoPixel()")
+                if gameMode == 0: #show cells based on age
+                    if world[rowNumber][colNumber].age > 60:
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set blue using the cell to rgb pixel map
+                    elif world[rowNumber][colNumber].age > 15:
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set blue using the cell to rgb pixel map
+                    elif world[rowNumber][colNumber].age > 5:
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set blue using the cell to rgb pixel map
+                    else:
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(165,42,42)) #if alive set brown using the cell to rgb pixel map
+                elif gameMode == 1: #show cells based on genetics
+                    if world[rowNumber][colNumber].genes == 'PP':
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map 
+                    elif world[rowNumber][colNumber].genes == 'GG':
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,128,0)) #if alive set green using the cell to rgb pixel map
+                    elif world[rowNumber][colNumber].genes == 'PG':
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,0,128)) #if alive set blue using the cell to rgb pixel map 
+                    elif world[rowNumber][colNumber].genes == 'oo':
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,80,0)) #if alive set orange using the cell to rgb pixel map 
+                    elif world[rowNumber][colNumber].genes == 'Po':
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(128,0,128)) #if alive set purple using the cell to rgb pixel map
+                    elif world[rowNumber][colNumber].genes == 'Go':
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,128,0)) #if alive set green using the cell to rgb pixel map 
+                    else:
+                        print("missing some important genetic info in drawNeoPixel()")
             else:
                 strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(0,0,0))      #if dead turn off
     strip.show()
@@ -588,26 +617,26 @@ else:
     win = GraphWin('planet', numOfRows*8, numOfColumns*8) # give title and dimensions of the graphical window/display
 
 world = createWorld()
-world = generateSeeds(world)
+world, gameMode = generateSeeds(world, gameMode)
 world = rgbLedMapping(world)
 
 while True:
     world = runSimulation(world, numOfRows, numOfColumns) # see who lives, dies, who is born (but don't kill cells until we check all of them)
     world = nextRound(world, numOfRows, numOfColumns) # advance the cell status for next round (ie flag as born/dead)
     if neoPixel:
-        drawNeoPixel(world, numOfRows, numOfColumns) # display the outcome on neopixel display
+        drawNeoPixel(world, numOfRows, numOfColumns, gameMode) # display the outcome on neopixel display
     else:
-        draw(world, numOfRows, numOfColumns, win) # display the outcome using graphics library
+        draw(world, numOfRows, numOfColumns, win, gameMode) # display the outcome using graphics library
     cellCount, stableCycleCount = checkStable(world, numOfRows, numOfColumns, cellCount, stableCycleCount)
     #print("CellCount: ", cellCount)
     if stableCycleCount > 20 : #world is boring / cyclic
-        world = generateSeeds(world)
+        world, gameMode = generateSeeds(world, gameMode)
         stableCycleCount = 0
     elif checkDiversity(world, numOfRows, numOfColumns) == False: # if noone is alive, or only one color is alive, then restart
-        world = generateSeeds(world)
+        world, gameMode = generateSeeds(world, gameMode)
         stableCycleCount = 0
     elif mqttReset == 1: #message via MQTT to reset
-        world = generateSeeds(world)
+        world, gameMode = generateSeeds(world, gameMode)
         stableCycleCount = 0
         mqttReset = 0
     #publish some updates to MQTT
