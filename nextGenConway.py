@@ -115,8 +115,10 @@ def generateSeeds(world, gameMode):
     time.sleep(5)  # lets pause and reflect before we reset the world
     if gameMode == 1: #toggle the game mode every cycle
         gameMode == 0
+        print('makeing gameMode 0')
     else:
         gameMode == 1
+        print('makeing gameMode 1')
 
     # lets seed the world with about 20%
     numberOfSeeds = int((numOfColumns*numOfRows)*.2)
@@ -504,24 +506,25 @@ def drawNeoPixel(world, numOfRows, numOfColumns, gameMode):
     for rowNumber in range(10,numOfRows-10):
         for colNumber in range(10,numOfColumns-10):
             if world[rowNumber][colNumber].alive:
+                print(gameMode)
                 if gameMode == 0: #show cells based on age
                     if world[rowNumber][colNumber].age > 60:
                         strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 15:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set cyan using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(42,145,31)) #if alive set green using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 5:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set yellow using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set cyan using the cell to rgb pixel map
                     else:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(255,140,0)) #if alive set orange using the cell to rgb pixel map
-                elif gameMode == 1: #show cells based on genetics
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set yellow using the cell to rgb pixel map
+                else: #show cells based on genetics
                     if world[rowNumber][colNumber].genes == 'PP':
                         strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map 
                     elif world[rowNumber][colNumber].genes == 'GG':
                         strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set cyan using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].genes == 'PG':
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set yellow using the cell to rgb pixel map 
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(42,145,31)) #if alive set green using the cell to rgb pixel map 
                     elif world[rowNumber][colNumber].genes == 'oo':
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(255,140,0)) #if alive set orange using the cell to rgb pixel map 
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set yellow using the cell to rgb pixel map 
                     elif world[rowNumber][colNumber].genes == 'Po':
                         strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].genes == 'Go':
