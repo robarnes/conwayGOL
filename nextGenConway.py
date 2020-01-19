@@ -131,6 +131,7 @@ def generateSeeds(world, gameMode):
         elif geneticOutcome == 2:
             world[seedRow][seedCol].setGenes("oo")  # Team Orange!
         world[seedRow][seedCol].alive = 1 #make the cell alive
+        world[seedRow][seedCol].age = 0 #make the cell alive
     return world, gameMode
 
 def createWorld():
