@@ -115,10 +115,8 @@ def generateSeeds(world, gameMode):
     time.sleep(5)  # lets pause and reflect before we reset the world
     if gameMode == 1: #toggle the game mode every cycle
         gameMode = 0
-        print('makeing gameMode 0')
     else:
         gameMode = 1
-        print('makeing gameMode 1')
 
     # lets seed the world with about 20%
     numberOfSeeds = int((numOfColumns*numOfRows)*.2)
@@ -506,7 +504,6 @@ def drawNeoPixel(world, numOfRows, numOfColumns, gameMode):
     for rowNumber in range(10,numOfRows-10):
         for colNumber in range(10,numOfColumns-10):
             if world[rowNumber][colNumber].alive:
-                print(gameMode)
                 if gameMode == 0: #show cells based on age
                     if world[rowNumber][colNumber].age > 60:
                         strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map
@@ -640,7 +637,6 @@ while True:
         stableCycleCount = 0
     elif mqttReset == 1: #message via MQTT to reset
         world, gameMode = generateSeeds(world, gameMode)
-        print('mqtt game mode ',gameMode)
         stableCycleCount = 0
         mqttReset = 0
     #publish some updates to MQTT
