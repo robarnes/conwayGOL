@@ -114,10 +114,10 @@ class Cell:
 def generateSeeds(world, gameMode):
     time.sleep(5)  # lets pause and reflect before we reset the world
     if gameMode == 1: #toggle the game mode every cycle
-        gameMode == 0
+        gameMode = 0
         print('makeing gameMode 0')
     else:
-        gameMode == 1
+        gameMode = 1
         print('makeing gameMode 1')
 
     # lets seed the world with about 20%
@@ -640,6 +640,7 @@ while True:
         stableCycleCount = 0
     elif mqttReset == 1: #message via MQTT to reset
         world, gameMode = generateSeeds(world, gameMode)
+        print('mqtt game mode ',gameMode)
         stableCycleCount = 0
         mqttReset = 0
     #publish some updates to MQTT
