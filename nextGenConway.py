@@ -507,11 +507,11 @@ def drawNeoPixel(world, numOfRows, numOfColumns, gameMode):
             if world[rowNumber][colNumber].alive:
                 if gameMode == 0: #show cells based on age
                     if world[rowNumber][colNumber].age > 60:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set cyan using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 15:
                         strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(42,145,31)) #if alive set green using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 5:
-                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(124,185,232)) #if alive set cyan using the cell to rgb pixel map
+                        strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(211,33,45)) #if alive set red using the cell to rgb pixel map
                     else:
                         strip.setPixelColor(world[rowNumber][colNumber].matrixLocation,Color(204,204,0)) #if alive set yellow using the cell to rgb pixel map
                 else: #show cells based on genetics
