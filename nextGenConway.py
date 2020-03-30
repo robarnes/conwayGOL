@@ -472,22 +472,22 @@ def draw(world, numOfRows, numOfColumns, win, gameMode):
                 dot = Circle(Point((rowNumber*8)+4, (colNumber*8)+4),4)
                 if gameMode == 0: #show cells based on age
                     if world[rowNumber][colNumber].age > 60:
-                        dot.setFill("red") #if alive set red using the cell to rgb pixel map
+                        dot.setFill("cyan") #if alive set red using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 15:
-                        dot.setFill("cyan") #if alive set cyan using the cell to rgb pixel map
+                        dot.setFill("green") #if alive set cyan using the cell to rgb pixel map
                     elif world[rowNumber][colNumber].age > 5:
-                        dot.setFill("yellow") #if alive set yellow using the cell to rgb pixel map
+                        dot.setFill("red") #if alive set yellow using the cell to rgb pixel map
                     else:
-                        dot.setFill("orange") #if alive set orange using the cell to rgb pixel map
+                        dot.setFill("yellow") #if alive set orange using the cell to rgb pixel map
                 elif gameMode == 1: #show cells based on genetics
                     if world[rowNumber][colNumber].genes == 'PP':
                         dot.setFill("red")
                     elif world[rowNumber][colNumber].genes == 'GG':
                         dot.setFill("cyan")
                     elif world[rowNumber][colNumber].genes == 'PG':
-                        dot.setFill("yellow")
+                        dot.setFill("green")
                     elif world[rowNumber][colNumber].genes == 'oo':
-                        dot.setFill("orange")
+                        dot.setFill("yellow")
                     elif world[rowNumber][colNumber].genes == 'Po':
                         dot.setFill("red")
                     elif world[rowNumber][colNumber].genes == 'Go':
