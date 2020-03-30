@@ -7,20 +7,30 @@ There is likely little of novel value here, as [Conways Game of Life](https://en
 - **geneticConway.py** was the second, and I added the concept of passive/recesive genes, with more information below
 - **nextGenConway.py** is the current, using object oriented code.  This will eventually run on a 48x48 rgb panel.
 
-Potentially interesting aspects of this code:
+There are two current game modes, which alternate on world resets.  Cells colors represent either their age or their genetic make up.  In the genetic side the cells each carry two genes, and recessive genes are tracked.
 
 **Genetics:**
 In conways game of life an empty/dead 'cell' with three neighbors becomes alive.  In my code each cell has a color gene, which defines what color it lights up on the rgb display.  When a new cell is to be born we randomly pick two of the three neighbors to be parents, and do a gene table lookup to see what color it should be.  Recessive genes are tracked.
 
-![Eye Color Genetics](https://github.com/robarnes/conwayGOL/blob/master/eye_color.jpg)
+Red = dominant  
+Cyan = dominant  
+Yellow = recessive  
 
-(P)urple = dominant  
-(G)reen = dominant  
-(o)range = recessive  
+Two of same dominant gene:
+- Red|Red will display as Red
+- Cyan|Cyan will display as Cyan
+Dominant and recessive genes:
+- Red|Yellow will display as Red
+- Cyan|Yellow will display as Cyan
+Two different dominant genes:
+- Red|Cyan will display as Green
+The rare-ish two recessive genes:
+- Yellow|Yellow will display as Yellow
 
-- PP will show Purple
-- Po will show Purple
-- GG will show Green
-- Go will show Green
-- PG will show Blue
-- oo Will show Orange
+**Age:**
+In the age-based game mode its a little easier to track the lifes of the cells as each round ticks by.  As the cells get older they change colors.
+
+- Yellow : 0-4 cycles
+- Red    : 5-14 cycles
+- Green  : 15-59 cycles
+- Cyan   : 60+ cycles
