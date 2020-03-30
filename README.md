@@ -19,11 +19,14 @@ Yellow = recessive
 Two of same dominant gene:
 - Red|Red will display as Red
 - Cyan|Cyan will display as Cyan
+
 Dominant and recessive genes:
 - Red|Yellow will display as Red
 - Cyan|Yellow will display as Cyan
+
 Two different dominant genes:
 - Red|Cyan will display as Green
+
 The rare-ish two recessive genes:
 - Yellow|Yellow will display as Yellow
 
